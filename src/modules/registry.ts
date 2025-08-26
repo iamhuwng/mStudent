@@ -30,19 +30,19 @@ export const modules: Module[] = [
   {
     id: 'assignments',
     title: 'Assignments',
-    enabled: false,
+    enabled: true,
     path: '/assignments',
   },
     {
     id: 'submissions-grading',
     title: 'Submissions',
-    enabled: false,
+    enabled: true,
     path: '/submissions',
   },
     {
     id: 'activity',
     title: 'Activity',
-    enabled: false,
+    enabled: true,
     path: '/activity',
   },
   {
@@ -51,6 +51,42 @@ export const modules: Module[] = [
     enabled: true,
     path: '/login',
   },
+  {
+    id: 'dashboard-teacher',
+    title: 'Teacher Dashboard',
+    enabled: false,
+    path: '/dashboard/teacher',
+  },
+  {
+    id: 'student-home',
+    title: 'Student Home',
+    enabled: false,
+    path: '/dashboard/student',
+  },
+  {
+    id: 'editor-ielts-reading',
+    title: 'IELTS Editor',
+    enabled: false,
+    path: '/editor/ielts',
+  },
+  {
+    id: 'flashcards',
+    title: 'Flashcards',
+    enabled: false,
+    path: '/flashcards',
+  },
+  {
+    id: 'tags-search',
+    title: 'Tags',
+    enabled: false,
+    path: '/tags',
+  },
+  {
+    id: 'deadlines-notifications',
+    title: 'Notifications',
+    enabled: false,
+    path: '/notifications',
+  }
 ];
 
 export function isModuleEnabled(id: string): boolean {
