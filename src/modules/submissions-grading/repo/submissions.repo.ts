@@ -8,39 +8,69 @@ const submissionsCollection = firestore.collection('submissions');
 
 // >>> BEGIN gen:submissions.create (layer:repo)
 export async function createSubmission(submissionData: Omit<Submission, 'id' | 'submittedAt' | 'grade'>): Promise<Submission> {
-    console.log(`Repo: Creating submission for student ${submissionData.studentId}`);
-    // Stub implementation
+    const newSubmissionRef = await submissionsCollection.add({
+        ...submissionData,
+        submittedAt: FieldValue.serverTimestamp(),
+        grade: null,
+    });
+    const snapshot = await newSubmissionRef.get();
+    const data = snapshot.data();
     return {
-        id: `sub-${Math.random()}`,
-        submittedAt: new Date(),
-        ...submissionData
+        id: snapshot.id,
+        ...data,
+        submittedAt: data?.submittedAt.toDate(),
     } as Submission;
 }
 // <<< END gen:submissions.create
 
 // >>> BEGIN gen:submissions.list.ungraded (layer:repo)
 export async function getUngradedSubmissions(classId?: string): Promise<Submission[]> {
-    console.log(`Repo: Fetching ungraded submissions.`);
-    // Stub implementation
-    return [];
+    // This is a simplification. A real implementation would need to join across assignments to filter by class.
+    // For now, we will fetch all ungraded submissions.
+    let query = submissionsCollection.where('grade', '==', null).orderBy('submittedAt', 'desc');
+
+    const snapshot = await query.get();
+    if (snapshot.empty) {
+        return [];
+    }
+
+    return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id,
+            ...data,
+            submittedAt: data.submittedAt.toDate(),
+        } as Submission;
+    });
 }
 // <<< END gen:submissions.list.ungraded
 
 // >>> BEGIN gen:submissions.grade (layer:repo)
 export async function gradeSubmission(submissionId: string, gradeData: Omit<Grade, 'gradedAt'>): Promise<Submission> {
-    console.log(`Repo: Grading submission ${submissionId}`);
-    // Stub implementation
+    const docRef = submissionsCollection.doc(submissionId);
+    const doc = await docRef.get();
+    if (!doc.exists) {
+        throw new Error('Submission not found');
+    }
+
     const grade: Grade = {
         ...gradeData,
         gradedAt: new Date(),
     };
+    
+    await docRef.update({ grade });
+    
+    const updatedDoc = await docRef.get();
+    const data = updatedDoc.data()!;
+
     return {
-        id: submissionId,
-        assignmentId: 'asgn-1',
-        studentId: 'user-1',
-        submittedAt: new Date(),
-        content: 'Stub content',
-        grade: grade
+        id: updatedDoc.id,
+        ...data,
+        submittedAt: data.submittedAt.toDate(),
+        grade: {
+            ...data.grade,
+            gradedAt: data.grade.gradedAt.toDate(),
+        }
     } as Submission;
 }
 // <<< END gen:submissions.grade
