@@ -1,0 +1,43 @@
+// @module:platform-core @layer:repo @owner:studio
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // >>> BEGIN gen:rules.users (layer:repo)
+    match /users/{userId} {
+      // Allow users to read their own data.
+      // Allow admins to read anyone's data.
+      allow read: if request.auth.uid == userId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      
+      // Allow admins to write to any user document.
+      allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    // <<< END gen:rules.users
+
+    // >>> BEGIN gen:rules.classes (layer:repo)
+    match /classes/{classId} {
+        // Allow any authenticated user to read class information.
+        allow read: if request.auth != null;
+        
+        // Only allow teachers or admins to create/update/delete classes.
+        allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['teacher', 'admin'];
+    }
+    // <<< END gen:rules.classes
+    
+    // >>> BEGIN gen:rules.materials (layer:repo)
+    match /materials/{materialId} {
+        // Allow any authenticated user to read materials.
+        allow read: if request.auth != null;
+
+        // Only allow teachers or admins to create/update/delete materials.
+        allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['teacher', 'admin'];
+    }
+    // <<< END gen:rules.materials
+
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

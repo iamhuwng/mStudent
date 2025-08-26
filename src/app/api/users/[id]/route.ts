@@ -8,6 +8,9 @@ import {
 import { isModuleEnabled } from '@/modules/registry';
 import { z } from 'zod';
 import { userSchema } from '@/modules/users/service/users.types';
+import { getIronSession } from 'iron-session';
+import { sessionOptions, SessionData } from '@/modules/auth-session/session';
+import { cookies } from 'next/headers';
 
 // >>> BEGIN gen:users.api.detail (layer:api)
 export async function GET(
@@ -39,6 +42,11 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+    const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+    if (!session.isLoggedIn || session.user.role !== 'admin') {
+        return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+    }
+
     if (!isModuleEnabled('users')) {
         return NextResponse.json({ message: 'Users module is disabled' }, { status: 403 });
     }
@@ -70,6 +78,11 @@ export async function DELETE(
     request: Request,
     { params }: { params: { id: string } }
 ) {
+    const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+    if (!session.isLoggedIn || session.user.role !== 'admin') {
+        return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+    }
+
     if (!isModuleEnabled('users')) {
         return NextResponse.json({ message: 'Users module is disabled' }, { status: 403 });
     }

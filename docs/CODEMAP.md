@@ -11,6 +11,9 @@ This document provides a map of the generated code in the M'Student application,
 | `core.middleware.guard` | `middleware` | `api` | `src/middleware.ts` | `* (excluded)` |
 | `core.http.fetch` | `http` | `service` | `src/lib/services/http.ts` | - |
 | `core.registry.read` | `modules`, `isModuleEnabled` | `service` | `src/modules/registry.ts` | - |
+| `rules.users` | - | `repo` | `firestore.rules` | - |
+| `rules.classes` | - | `repo` | `firestore.rules` | - |
+| `rules.materials` | - | `repo` | `firestore.rules` | - |
 
 ## auth-session
 
@@ -152,6 +155,8 @@ This document provides a map of the generated code in the M'Student application,
 
 | Gen ID | Export | Layer | File | Routes |
 |---|---|---|---|---|
+| `flashcards.list.ui` | `FlashcardsPage` | `ui` | `src/app/flashcards/page.tsx` | `/flashcards` |
+| `flashcards.detail.ui` | `FlashcardSetPage` | `ui` | `src/app/flashcards/[id]/page.tsx` | `/flashcards/:id` |
 | `flashcards.set.create` | `createFlashcardSet` | `service` | `src/modules/flashcards/service/flashcards.service.ts` | `/api/flashcards/sets` |
 | `flashcards.card.create` | `createFlashcard` | `service` | `src/modules/flashcards/service/flashcards.service.ts` | `/api/flashcards/cards` |
 | `flashcards.progress.mark` | `markFlashcardProgress` | `service` | `src/modules/flashcards/service/flashcards.service.ts` | `/api/flashcards/progress` |

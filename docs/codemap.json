@@ -46,6 +46,30 @@
         "src/modules/users/service/users.service.ts"
     ]
   },
+  "rules.users": {
+    "file": "firestore.rules",
+    "export": null,
+    "layer": "repo",
+    "module": "platform-core",
+    "routes": [],
+    "callers": []
+  },
+  "rules.classes": {
+    "file": "firestore.rules",
+    "export": null,
+    "layer": "repo",
+    "module": "platform-core",
+    "routes": [],
+    "callers": []
+  },
+  "rules.materials": {
+    "file": "firestore.rules",
+    "export": null,
+    "layer": "repo",
+    "module": "platform-core",
+    "routes": [],
+    "callers": []
+  },
   "auth.login.ui": {
     "file": "src/modules/auth-session/ui/login-form.tsx",
     "export": "LoginForm",
@@ -773,6 +797,22 @@
     "module": "student-home",
     "routes": [],
     "callers": ["src/app/dashboard/student/page.tsx"]
+  },
+    "flashcards.list.ui": {
+    "file": "src/app/flashcards/page.tsx",
+    "export": "FlashcardsPage",
+    "layer": "ui",
+    "module": "flashcards",
+    "routes": ["/flashcards"],
+    "callers": []
+  },
+  "flashcards.detail.ui": {
+    "file": "src/app/flashcards/[id]/page.tsx",
+    "export": "FlashcardSetPage",
+    "layer": "ui",
+    "module": "flashcards",
+    "routes": ["/flashcards/:id"],
+    "callers": []
   },
   "flashcards.set.create.service": {
     "file": "src/modules/flashcards/service/flashcards.service.ts",
