@@ -1,6 +1,6 @@
 
 {
-  "platform-core.header": {
+  "core.header": {
     "file": "src/modules/platform-core/ui/header.tsx",
     "export": "Header",
     "layer": "ui",
@@ -8,7 +8,7 @@
     "routes": [],
     "callers": ["src/app/layout.tsx"]
   },
-  "platform-core.main-nav": {
+  "core.nav": {
     "file": "src/modules/platform-core/ui/main-nav.tsx",
     "export": "MainNav",
     "layer": "ui",
@@ -16,7 +16,7 @@
     "routes": [],
     "callers": ["src/modules/platform-core/ui/header.tsx"]
   },
-  "platform-core.home-page": {
+  "core.home": {
     "file": "src/app/page.tsx",
     "export": "Home",
     "layer": "ui",
@@ -24,7 +24,7 @@
     "routes": ["/"],
     "callers": []
   },
-  "platform-core.middleware": {
+  "core.middleware.guard": {
     "file": "src/middleware.ts",
     "export": "middleware",
     "layer": "api",
@@ -32,7 +32,7 @@
     "routes": ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
     "callers": []
   },
-  "platform-core.http-fetch": {
+  "core.http.fetch": {
     "file": "src/lib/services/http.ts",
     "export": "http",
     "layer": "service",
@@ -43,7 +43,19 @@
       "src/modules/users/service/users.service.ts"
     ]
   },
-  "auth-session.login-form": {
+  "core.registry.read": {
+    "file": "src/modules/registry.ts",
+    "export": "modules, isModuleEnabled",
+    "layer": "service",
+    "module": "platform-core",
+    "routes": [],
+    "callers": [
+        "src/modules/platform-core/ui/main-nav.tsx",
+        "src/modules/auth-session/service/session.service.ts",
+        "src/modules/users/service/users.service.ts"
+    ]
+  },
+  "auth.login.ui": {
     "file": "src/modules/auth-session/ui/login-form.tsx",
     "export": "LoginForm",
     "layer": "ui",
@@ -51,7 +63,7 @@
     "routes": [],
     "callers": ["src/app/login/page.tsx"]
   },
-  "auth-session.login": {
+  "auth.login.service": {
     "file": "src/modules/auth-session/service/session.service.ts",
     "export": "login",
     "layer": "service",
@@ -59,7 +71,15 @@
     "routes": ["/api/session/login"],
     "callers": ["src/modules/auth-session/ui/login-form.tsx"]
   },
-  "auth-session.api-handler": {
+    "auth.logout.service": {
+    "file": "src/modules/auth-session/service/session.service.ts",
+    "export": "logout",
+    "layer": "service",
+    "module": "auth-session",
+    "routes": ["/api/session/logout"],
+    "callers": ["src/modules/platform-core/ui/header.tsx"]
+  },
+  "auth.api": {
     "file": "src/app/api/session/[action]/route.ts",
     "export": "POST",
     "layer": "api",
@@ -67,7 +87,7 @@
     "routes": ["/api/session/login", "/api/session/logout"],
     "callers": ["src/modules/auth-session/service/session.service.ts"]
   },
-  "auth-session.repo-login": {
+  "auth.login.repo": {
     "file": "src/modules/auth-session/repo/session.repo.ts",
     "export": "login",
     "layer": "repo",
@@ -75,7 +95,15 @@
     "routes": [],
     "callers": ["src/app/api/session/[action]/route.ts"]
   },
-  "users.users-list": {
+  "auth.claims.ensure": {
+    "file": "src/modules/auth-session/repo/session.repo.ts",
+    "export": "session",
+    "layer": "repo",
+    "module": "auth-session",
+    "routes": [],
+    "callers": []
+  },
+  "users.list": {
     "file": "src/modules/users/ui/users-list.tsx",
     "export": "UsersList",
     "layer": "ui",
@@ -83,7 +111,7 @@
     "routes": [],
     "callers": ["src/app/users/page.tsx"]
   },
-  "users.user-detail": {
+  "users.detail": {
     "file": "src/modules/users/ui/user-detail.tsx",
     "export": "UserDetail",
     "layer": "ui",
@@ -91,7 +119,7 @@
     "routes": [],
     "callers": ["src/app/users/[id]/page.tsx"]
   },
-  "users.get-users": {
+  "users.list.service": {
     "file": "src/modules/users/service/users.service.ts",
     "export": "getUsers",
     "layer": "service",
@@ -99,7 +127,7 @@
     "routes": ["/api/users"],
     "callers": ["src/modules/users/ui/users-list.tsx"]
   },
-  "users.get-user-by-id": {
+  "users.detail.service": {
     "file": "src/modules/users/service/users.service.ts",
     "export": "getUserById",
     "layer": "service",
@@ -107,7 +135,31 @@
     "routes": ["/api/users/:id"],
     "callers": ["src/modules/users/ui/user-detail.tsx"]
   },
-  "users.api-get-users": {
+    "users.create.service": {
+    "file": "src/modules/users/service/users.service.ts",
+    "export": "createUser",
+    "layer": "service",
+    "module": "users",
+    "routes": ["/api/users"],
+    "callers": []
+  },
+    "users.update.service": {
+    "file": "src/modules/users/service/users.service.ts",
+    "export": "updateUser",
+    "layer": "service",
+    "module": "users",
+    "routes": ["/api/users/:id"],
+    "callers": []
+  },
+    "users.delete.service": {
+    "file": "src/modules/users/service/users.service.ts",
+    "export": "deleteUser",
+    "layer": "service",
+    "module": "users",
+    "routes": ["/api/users/:id"],
+    "callers": []
+  },
+  "users.api.list": {
     "file": "src/app/api/users/route.ts",
     "export": "GET",
     "layer": "api",
@@ -115,7 +167,15 @@
     "routes": ["/api/users"],
     "callers": ["src/modules/users/service/users.service.ts"]
   },
-  "users.api-get-user-by-id": {
+    "users.api.create": {
+    "file": "src/app/api/users/route.ts",
+    "export": "POST",
+    "layer": "api",
+    "module": "users",
+    "routes": ["/api/users"],
+    "callers": ["src/modules/users/service/users.service.ts"]
+  },
+  "users.api.detail": {
     "file": "src/app/api/users/[id]/route.ts",
     "export": "GET",
     "layer": "api",
@@ -123,7 +183,23 @@
     "routes": ["/api/users/:id"],
     "callers": ["src/modules/users/service/users.service.ts"]
   },
-  "users.repo-get-users": {
+  "users.api.update": {
+    "file": "src/app/api/users/[id]/route.ts",
+    "export": "PUT",
+    "layer": "api",
+    "module": "users",
+    "routes": ["/api/users/:id"],
+    "callers": ["src/modules/users/service/users.service.ts"]
+  },
+    "users.api.delete": {
+    "file": "src/app/api/users/[id]/route.ts",
+    "export": "DELETE",
+    "layer": "api",
+    "module": "users",
+    "routes": ["/api/users/:id"],
+    "callers": ["src/modules/users/service/users.service.ts"]
+  },
+  "users.list.repo": {
     "file": "src/modules/users/repo/users.repo.ts",
     "export": "getUsers",
     "layer": "repo",
@@ -131,9 +207,33 @@
     "routes": [],
     "callers": ["src/app/api/users/route.ts"]
   },
-  "users.repo-get-user-by-id": {
+  "users.detail.repo": {
     "file": "src/modules/users/repo/users.repo.ts",
     "export": "getUserById",
+    "layer": "repo",
+    "module": "users",
+    "routes": [],
+    "callers": ["src/app/api/users/[id]/route.ts"]
+  },
+    "users.create.repo": {
+    "file": "src/modules/users/repo/users.repo.ts",
+    "export": "createUser",
+    "layer": "repo",
+    "module": "users",
+    "routes": [],
+    "callers": ["src/app/api/users/route.ts"]
+  },
+  "users.update.repo": {
+    "file": "src/modules/users/repo/users.repo.ts",
+    "export": "updateUser",
+    "layer": "repo",
+    "module": "users",
+    "routes": [],
+    "callers": ["src/app/api/users/[id]/route.ts"]
+  },
+    "users.delete.repo": {
+    "file": "src/modules/users/repo/users.repo.ts",
+    "export": "deleteUser",
     "layer": "repo",
     "module": "users",
     "routes": [],

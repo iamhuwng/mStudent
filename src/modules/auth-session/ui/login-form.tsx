@@ -18,10 +18,12 @@ import { login } from '../service/session.service';
 import { loginSchema, type LoginCredentials } from '../service/session.types';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-// >>> BEGIN gen:auth-session.login-form (layer:ui)
+// >>> BEGIN gen:auth.login.ui (layer:ui)
 export function LoginForm() {
   const { toast } = useToast();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<LoginCredentials>({
@@ -42,6 +44,8 @@ export function LoginForm() {
           description: `Welcome back, ${result.user.name}!`,
         });
         form.reset();
+        router.push('/');
+        router.refresh(); // to re-fetch server-side props like session
       }
     } catch (error) {
       toast({
@@ -91,4 +95,4 @@ export function LoginForm() {
     </Form>
   );
 }
-// <<< END gen:auth-session.login-form
+// <<< END gen:auth.login.ui

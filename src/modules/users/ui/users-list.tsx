@@ -19,7 +19,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
 
-// >>> BEGIN gen:users.users-list (layer:ui)
+// >>> BEGIN gen:users.list (layer:ui)
 export function UsersList() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -91,4 +91,4 @@ export function UsersList() {
     </div>
   );
 }
-// <<< END gen:users.users-list
+// <<< END gen:users.list

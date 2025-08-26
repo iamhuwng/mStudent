@@ -4,8 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { GraduationCap, Users, BookOpen } from "lucide-react";
 import Link from "next/link";
 
+// >>> BEGIN gen:core.home (layer:ui)
 export default function Home() {
-// >>> BEGIN gen:platform-core.home-page (layer:ui)
   return (
     <div className="flex flex-col min-h-screen">
       <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-primary text-primary-foreground">
@@ -73,5 +73,5 @@ export default function Home() {
       </section>
     </div>
   );
-// <<< END gen:platform-core.home-page
 }
+// <<< END gen:core.home

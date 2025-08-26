@@ -7,7 +7,7 @@ import type { LoginCredentials, LoginResponse } from './session.types';
 
 const MODULE_ID = 'auth-session';
 
-// >>> BEGIN gen:auth-session.login (layer:service)
+// >>> BEGIN gen:auth.login.service (layer:service)
 export async function login(credentials: LoginCredentials): Promise<LoginResponse> {
   if (!isModuleEnabled(MODULE_ID)) {
     throw new Error('Authentication module is disabled.');
@@ -18,9 +18,9 @@ export async function login(credentials: LoginCredentials): Promise<LoginRespons
     body: JSON.stringify(credentials),
   });
 }
-// <<< END gen:auth-session.login
+// <<< END gen:auth.login.service
 
-// >>> BEGIN gen:auth-session.logout (layer:service)
+// >>> BEGIN gen:auth.logout.service (layer:service)
 export async function logout(): Promise<{ message: string }> {
     if (!isModuleEnabled(MODULE_ID)) {
         throw new Error('Authentication module is disabled.');
@@ -30,9 +30,8 @@ export async function logout(): Promise<{ message: string }> {
         method: 'POST',
     });
 }
-// <<< END gen:auth-session.logout
+// <<< END gen:auth.logout.service
 
-// Define types for the service
-// >>> BEGIN gen:auth-session.types (layer:service)
+// >>> BEGIN gen:auth.types (layer:service)
 export * from './session.types';
-// <<< END gen:auth-session.types
+// <<< END gen:auth.types

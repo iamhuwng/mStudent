@@ -1,4 +1,6 @@
-// @module:platform-core @layer:ui @owner:studio
+// @module:platform-core @layer:service @owner:studio
+
+// >>> BEGIN gen:core.registry.read (layer:service)
 export type Module = {
   id: string;
   title: string;
@@ -27,3 +29,4 @@ export function isModuleEnabled(id: string): boolean {
   const module = modules.find((m) => m.id === id);
   return module?.enabled ?? false;
 }
+// <<< END gen:core.registry.read

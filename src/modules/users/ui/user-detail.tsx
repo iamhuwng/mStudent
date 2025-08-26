@@ -16,7 +16,7 @@ type UserDetailProps = {
   id: string;
 };
 
-// >>> BEGIN gen:users.user-detail (layer:ui)
+// >>> BEGIN gen:users.detail (layer:ui)
 export function UserDetail({ id }: UserDetailProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -107,4 +107,4 @@ export function UserDetail({ id }: UserDetailProps) {
     </Card>
   );
 }
-// <<< END gen:users.user-detail
+// <<< END gen:users.detail

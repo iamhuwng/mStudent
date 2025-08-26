@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { modules } from '@/modules/registry';
 
-// >>> BEGIN gen:platform-core.main-nav (layer:ui)
+// >>> BEGIN gen:core.nav (layer:ui)
 export function MainNav() {
   const pathname = usePathname();
   const enabledModules = modules.filter((m) => m.enabled);
@@ -30,4 +30,4 @@ export function MainNav() {
     </nav>
   );
 }
-// <<< END gen:platform-core.main-nav
+// <<< END gen:core.nav

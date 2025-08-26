@@ -1,13 +1,13 @@
 // @module:platform-core @layer:api @owner:studio
 import { type NextRequest, NextResponse } from 'next/server';
 
-// >>> BEGIN gen:platform-core.middleware (layer:api)
+// >>> BEGIN gen:core.middleware.guard (layer:api)
 export function middleware(request: NextRequest) {
   // This is a placeholder for any future middleware logic,
   // such as authentication checks.
   return NextResponse.next();
 }
-// <<< END gen:platform-core.middleware
+// <<< END gen:core.middleware.guard
 
 export const config = {
   /*

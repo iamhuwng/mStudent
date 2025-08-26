@@ -4,7 +4,7 @@ type HttpOptions = RequestInit & {
   // custom options here
 };
 
-// >>> BEGIN gen:platform-core.http-fetch (layer:service)
+// >>> BEGIN gen:core.http.fetch (layer:service)
 async function http<T>(path: string, options?: HttpOptions): Promise<T> {
   const apiPrefix = '/api';
   const url = `${apiPrefix}${path}`;
@@ -35,6 +35,6 @@ async function http<T>(path: string, options?: HttpOptions): Promise<T> {
   
   return response.json();
 }
-// <<< END gen:platform-core.http-fetch
+// <<< END gen:core.http.fetch
 
 export { http };
