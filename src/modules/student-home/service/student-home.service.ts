@@ -10,11 +10,12 @@ import { getClasses } from '@/modules/classes/service/classes.service';
 import type { User } from '@/modules/users/service/users.types';
 import type { Assignment } from '@/modules/assignments/service/assignments.types';
 import type { Class } from '@/modules/classes/service/classes.types';
+import { Page } from '@/lib/types/pagination';
 
 export type StudentHomeData = {
     user?: User;
-    assignments?: Assignment[];
-    classes?: Class[];
+    assignments?: Page<Assignment>;
+    classes?: Page<Class>;
 }
 
 // >>> BEGIN gen:student.home.aggregate (layer:service)
@@ -22,18 +23,20 @@ export async function getStudentHomeData(studentId: string): Promise<StudentHome
     const data: StudentHomeData = {};
     const pagination = { limit: 5 };
 
+    const promises = [];
+
     if (isModuleEnabled('users')) {
-        data.user = await getUserById(studentId);
+        promises.push(getUserById(studentId).then(res => { data.user = res }));
     }
     if (isModuleEnabled('assignments')) {
-        const assignmentResponse = await getAssignmentsForStudent(studentId, pagination);
-        data.assignments = assignmentResponse.items;
+        promises.push(getAssignmentsForStudent(studentId, pagination).then(res => { data.assignments = res }));
     }
     if (isModuleEnabled('classes')) {
         // This is a simplification; in a real app, we'd get only the classes the student is in.
-        const classResponse = await getClasses(pagination);
-        data.classes = classResponse.data;
+        promises.push(getClasses({ page: 1, limit: 5 }).then(res => { data.classes = res }));
     }
+    
+    await Promise.all(promises);
     
     return data;
 }

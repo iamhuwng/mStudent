@@ -12,7 +12,7 @@ import { Terminal } from 'lucide-react';
 import { computeDeadlines } from '@/modules/deadlines-notifications/service/deadlines.service';
 import { Badge } from '@/components/ui/badge';
 
-// >>> BEGIN gen:student.home.aggregate (layer:ui)
+// >>> BEGIN gen:student.home.aggregate.ui (layer:ui)
 export function StudentHome({ studentId }: { studentId: string }) {
   const [data, setData] = useState<StudentHomeData | null>(null);
   const [deadlines, setDeadlines] = useState<any>(null);
@@ -67,7 +67,7 @@ export function StudentHome({ studentId }: { studentId: string }) {
     );
   }
 
-  const hasData = data && (data.user || (data.assignments && data.assignments.length > 0) || (data.classes && data.classes.length > 0));
+  const hasData = data && (data.user || (data.assignments?.items && data.assignments.items.length > 0) || (data.classes?.items && data.classes.items.length > 0));
 
   if (!hasData) {
       return (
@@ -91,30 +91,30 @@ export function StudentHome({ studentId }: { studentId: string }) {
             </CardHeader>
         </Card>
       )}
-      {isModuleEnabled('assignments') && data?.assignments && data.assignments.length > 0 && (
+      {isModuleEnabled('assignments') && data?.assignments?.items && data.assignments.items.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>My Assignments</CardTitle>
             <CardDescription>All your assigned work.</CardDescription>
           </CardHeader>
           <CardContent>
-            <p>You have {data.assignments.length} assignments.</p>
+            <p>You have {data.assignments.items.length} assignments.</p>
             {deadlinesEnabled && deadlines?.upcoming?.length > 0 && (
                 <p><Badge>{deadlines.upcoming.length} due soon</Badge></p>
             )}
           </CardContent>
         </Card>
       )}
-      {isModuleEnabled('classes') && data?.classes && data.classes.length > 0 && (
+      {isModuleEnabled('classes') && data?.classes?.items && data.classes.items.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>My Classes</CardTitle>
             <CardDescription>Classes you're enrolled in.</CardDescription>
           </Header>
-          <CardContent><p>You are in {data.classes.length} classes.</p></CardContent>
+          <CardContent><p>You are in {data.classes.items.length} classes.</p></CardContent>
         </Card>
       )}
     </div>
   );
 }
-// <<< END gen:student.home.aggregate
+// <<< END gen:student.home.aggregate.ui

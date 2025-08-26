@@ -11,13 +11,14 @@ import type { Assignment } from '@/modules/assignments/service/assignments.types
 import type { Submission } from '@/modules/submissions-grading/service/submissions.types';
 import type { Material } from '@/modules/materials/service/materials.types';
 import type { ActivityEvent } from '@/modules/activity/service/activity.types';
+import { Page } from '@/lib/types/pagination';
 
 
 export type TeacherDashboardData = {
-    assignments?: Assignment[];
-    submissions?: Submission[];
-    materials?: Material[];
-    activity?: ActivityEvent[];
+    assignments?: Page<Assignment>;
+    submissions?: Page<Submission>;
+    materials?: Page<Material>;
+    activity?: Page<ActivityEvent>;
 }
 
 // >>> BEGIN gen:dashboard.teacher.aggregate (layer:service)
@@ -25,23 +26,23 @@ export async function getTeacherDashboardData(): Promise<TeacherDashboardData> {
     const data: TeacherDashboardData = {};
     const pagination = { limit: 5 };
 
+    const promises = [];
+
     if (isModuleEnabled('assignments')) {
         // In a real app, we'd get the teacher's classId from the session
-        const assignmentsResponse = await getAssignmentsForClass('class-1', pagination); 
-        data.assignments = assignmentsResponse.items;
+        promises.push(getAssignmentsForClass('class-1', pagination).then(res => { data.assignments = res }));
     }
     if (isModuleEnabled('submissions-grading')) {
-        const submissionsResponse = await getUngradedSubmissions({}, pagination);
-        data.submissions = submissionsResponse.items;
+        promises.push(getUngradedSubmissions({}, pagination).then(res => { data.submissions = res }));
     }
     if (isModuleEnabled('materials')) {
-        const materialsResponse = await getMaterials({page: 1, limit: 5});
-        data.materials = materialsResponse.data;
+        promises.push(getMaterials({ page: 1, limit: 5 }).then(res => { data.materials = res }));
     }
     if (isModuleEnabled('activity')) {
-        const activityResponse = await getActivity({}, pagination);
-        data.activity = activityResponse.items;
+        promises.push(getActivity({}, pagination).then(res => { data.activity = res }));
     }
+
+    await Promise.all(promises);
 
     return data;
 }

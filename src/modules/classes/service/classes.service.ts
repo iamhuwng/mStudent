@@ -4,15 +4,22 @@
 import { http } from '@/lib/services/http';
 import { isModuleEnabled } from '@/modules/registry';
 import type { Class, ClassMember } from './classes.types';
+import { Page } from '@/lib/types/pagination';
 
 const MODULE_ID = 'classes';
 
 // >>> BEGIN gen:classes.list.service (layer:service)
-export async function getClasses(): Promise<Class[]> {
+export async function getClasses(pagination: { page?: number, limit?: number }): Promise<Page<Class>> {
   if (!isModuleEnabled(MODULE_ID)) {
     throw new Error('Classes module is disabled.');
   }
-  return http<Class[]>('/classes');
+  const params = new URLSearchParams(pagination as Record<string, string>);
+  const response = await http<{data: Class[]}>
+(`/classes?${params.toString()}`);
+  return {
+    items: response.data,
+    hasMore: false, // This API doesn't support pagination properly yet.
+  }
 }
 // <<< END gen:classes.list.service
 

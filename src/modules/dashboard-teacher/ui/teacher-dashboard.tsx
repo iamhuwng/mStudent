@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { computeDeadlines } from '@/modules/deadlines-notifications/service/deadlines.service';
 import { Badge } from '@/components/ui/badge';
 
-// >>> BEGIN gen:dashboard.teacher.aggregate (layer:ui)
+// >>> BEGIN gen:dashboard.teacher.aggregate.ui (layer:ui)
 export function TeacherDashboard() {
   const [data, setData] = useState<TeacherDashboardData | null>(null);
   const [deadlines, setDeadlines] = useState<any>(null);
@@ -70,7 +70,7 @@ export function TeacherDashboard() {
     );
   }
   
-  const hasData = data && Object.values(data).some(value => Array.isArray(value) && value.length > 0);
+  const hasData = data && Object.values(data).some(value => value && Array.isArray(value.items) && value.items.length > 0);
 
   if (!hasData) {
       return (
@@ -87,57 +87,57 @@ export function TeacherDashboard() {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {isModuleEnabled('assignments') && data?.assignments && data.assignments.length > 0 && (
+      {isModuleEnabled('assignments') && data?.assignments?.items && data.assignments.items.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>Recent Assignments</CardTitle>
             <CardDescription>The latest assignments created.</CardDescription>
           </CardHeader>
           <CardContent>
-            <p>Showing {data.assignments.length} assignments.</p>
+            <p>Showing {data.assignments.items.length} assignments.</p>
             {deadlinesEnabled && deadlines?.overdue?.length > 0 && (
                 <p><Badge variant="destructive">{deadlines.overdue.length} overdue</Badge></p>
             )}
           </CardContent>
         </Card>
       )}
-      {isModuleEnabled('submissions-grading') && data?.submissions && data.submissions.length > 0 && (
+      {isModuleEnabled('submissions-grading') && data?.submissions?.items && data.submissions.items.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>Ungraded Submissions</CardTitle>
             <CardDescription>Work that needs your attention.</CardDescription>
           </CardHeader>
           <CardContent>
-            <p>{data.submissions.length} submissions need grading.</p>
+            <p>{data.submissions.items.length} submissions need grading.</p>
           </CardContent>
         </Card>
       )}
-      {isModuleEnabled('materials') && data?.materials && data.materials.length > 0 && (
+      {isModuleEnabled('materials') && data?.materials?.items && data.materials.items.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>Recent Materials</CardTitle>
             <CardDescription>The latest materials available.</CardDescription>
           </CardHeader>
           <CardContent>
-            <p>Showing last {data.materials.length} materials.</p>
+            <p>Showing last {data.materials.items.length} materials.</p>
             <Button asChild variant="link" className="p-0 mt-2">
                 <Link href="/materials">View All</Link>
             </Button>
           </CardContent>
         </Card>
       )}
-      {isModuleEnabled('activity') && data?.activity && data.activity.length > 0 && (
+      {isModuleEnabled('activity') && data?.activity?.items && data.activity.items.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
             <CardDescription>A log of recent system events.</CardDescription>
           </CardHeader>
           <CardContent>
-            <p>{data.activity.length} recent events.</p>
+            <p>{data.activity.items.length} recent events.</p>
           </CardContent>
         </Card>
       )}
     </div>
   );
 }
-// <<< END gen:dashboard.teacher.aggregate
+// <<< END gen:dashboard.teacher.aggregate.ui
