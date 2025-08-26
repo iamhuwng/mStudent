@@ -16,3 +16,16 @@ export type Assignment = {
     availabilityEnd?: Date;
     createdAt: Date;
 };
+
+export type Assignee = {
+    id: string;
+    name: string;
+    type: 'user' | 'class';
+    details: string; // e.g. email or class description
+};
+
+export type BulkAssignmentPayload = {
+    materialId: string;
+    assignees: { id: string; type: 'user' | 'class' }[];
+    deadline?: Date;
+};

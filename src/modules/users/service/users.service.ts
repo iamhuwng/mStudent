@@ -4,15 +4,22 @@
 import { http } from '@/lib/services/http';
 import { isModuleEnabled } from '@/modules/registry';
 import type { User } from './users.types';
+import { Page } from '@/lib/types/pagination';
 
 const MODULE_ID = 'users';
 
 // >>> BEGIN gen:users.list.service (layer:service)
-export async function getUsers(): Promise<User[]> {
+export async function getUsers(pagination?: { page?: number, limit?: number }): Promise<Page<User>> {
   if (!isModuleEnabled(MODULE_ID)) {
     throw new Error('Users module is disabled.');
   }
-  return http<User[]>('/users');
+  const params = new URLSearchParams(pagination as Record<string, string>);
+  const response = await http<{data: User[]}>
+(`/users?${params.toString()}`);
+  return {
+    items: response.data,
+    hasMore: false, // This API doesn't support pagination properly yet.
+  };
 }
 // <<< END gen:users.list.service
 

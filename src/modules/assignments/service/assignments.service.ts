@@ -3,7 +3,7 @@
 
 import { http } from '@/lib/services/http';
 import { isModuleEnabled } from '@/modules/registry';
-import type { Assignment } from './assignments.types';
+import type { Assignment, BulkAssignmentPayload } from './assignments.types';
 import type { Page } from '@/lib/types/pagination';
 
 const MODULE_ID = 'assignments';
@@ -19,6 +19,18 @@ export async function createAssignment(assignmentData: Omit<Assignment, 'id' | '
     });
 }
 // <<< END gen:assignments.create
+
+// >>> BEGIN gen:assignments.bulkCreate (layer:service)
+export async function createBulkAssignments(bulkData: BulkAssignmentPayload): Promise<Assignment[]> {
+    if (!isModuleEnabled(MODULE_ID)) {
+        throw new Error('Assignments module is disabled.');
+    }
+    return http<Assignment[]>('/assignments', {
+        method: 'POST',
+        body: JSON.stringify(bulkData),
+    });
+}
+// <<< END gen:assignments.bulkCreate
 
 // >>> BEGIN gen:assignments.list.forStudent (layer:service)
 export async function getAssignmentsForStudent(
