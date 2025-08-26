@@ -13,11 +13,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableCaption,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Eye } from 'lucide-react';
+import { Eye, UserPlus } from 'lucide-react';
 
 // >>> BEGIN gen:users.list (layer:ui)
 export function UsersList() {
@@ -47,6 +48,16 @@ export function UsersList() {
   return (
     <div className="border rounded-lg">
       <Table>
+        {!isLoading && users.length === 0 && (
+          <TableCaption>
+            <div className="flex flex-col items-center gap-4 p-8 text-center">
+              <UserPlus className="h-12 w-12 text-muted-foreground" />
+              <h3 className="text-xl font-semibold">No Users Found</h3>
+              <p className="text-muted-foreground">Get started by creating a new user.</p>
+              <Button disabled>Create User</Button>
+            </div>
+          </TableCaption>
+        )}
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>

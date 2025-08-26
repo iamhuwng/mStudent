@@ -5,6 +5,7 @@ import {
     createUser as repoCreateUser
 } from '@/modules/users/repo/users.repo';
 import { isModuleEnabled } from '@/modules/registry';
+import { userCreateSchema } from '@/modules/users/service/users.types';
 
 // >>> BEGIN gen:users.api.list (layer:api)
 export async function GET() {
@@ -30,7 +31,8 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json();
-        const newUser = await repoCreateUser(body);
+        const validatedData = userCreateSchema.parse(body);
+        const newUser = await repoCreateUser(validatedData);
         return NextResponse.json(newUser, { status: 201 });
     } catch (error) {
         const message = error instanceof Error ? error.message : 'An unknown error occurred';

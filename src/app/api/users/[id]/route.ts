@@ -6,6 +6,7 @@ import {
     deleteUser as repoDeleteUser
 } from '@/modules/users/repo/users.repo';
 import { isModuleEnabled } from '@/modules/registry';
+import { userUpdateSchema } from '@/modules/users/service/users.types';
 
 // >>> BEGIN gen:users.api.detail (layer:api)
 export async function GET(
@@ -44,7 +45,8 @@ export async function PUT(
     try {
         const id = params.id;
         const body = await request.json();
-        const updatedUser = await repoUpdateUser(id, body);
+        const validatedData = userUpdateSchema.parse(body);
+        const updatedUser = await repoUpdateUser(id, validatedData);
         return NextResponse.json(updatedUser);
     } catch (error) {
         const message = error instanceof Error ? error.message : 'An unknown error occurred';
