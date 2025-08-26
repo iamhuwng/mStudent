@@ -24,9 +24,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Adding experimental flag for serverActions
   experimental: {
     serverActions: true,
+    serverComponentsExternalPackages: ['firebase-admin'],
   },
 };
 
