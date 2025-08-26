@@ -1,9 +1,9 @@
 // @module:users @layer:ui @owner:studio
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { getUsers } from '../service/users.service';
+import { getUsers, GetUsersResponse } from '../service/users.service';
 import type { User } from '../service/users.types';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -18,32 +18,57 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Eye, UserPlus } from 'lucide-react';
+import { Eye, UserPlus, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const PAGE_SIZE = 5;
 
 // >>> BEGIN gen:users.list (layer:ui)
 export function UsersList() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [pageHistory, setPageHistory] = useState<string[]>([]); // Stores the ID of the first item of each page
+  const [hasNextPage, setHasNextPage] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        setIsLoading(true);
-        const fetchedUsers = await getUsers();
-        setUsers(fetchedUsers);
-      } catch (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Failed to fetch users',
-          description: error instanceof Error ? error.message : 'An unknown error occurred.',
-        });
-      } finally {
-        setIsLoading(false);
+  const fetchUsers = useCallback(async (pageIndex: number) => {
+    try {
+      setIsLoading(true);
+      const startAfter = pageIndex > 0 ? pageHistory[pageIndex] : undefined;
+      const response: GetUsersResponse = await getUsers(PAGE_SIZE, startAfter);
+      
+      setUsers(response.users);
+      setHasNextPage(response.hasNextPage);
+
+      if (response.users.length > 0 && pageIndex === pageHistory.length) {
+        setPageHistory(prev => [...prev, response.users[0].id]);
       }
+
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to fetch users',
+        description: error instanceof Error ? error.message : 'An unknown error occurred.',
+      });
+    } finally {
+      setIsLoading(false);
     }
-    fetchUsers();
-  }, [toast]);
+  }, [toast, pageHistory]);
+
+  useEffect(() => {
+    fetchUsers(page);
+  }, [page, fetchUsers]);
+  
+  const handleNextPage = () => {
+    if (hasNextPage) {
+        setPage(prev => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    setPage(prev => Math.max(0, prev - 1));
+  };
+
 
   return (
     <div className="border rounded-lg">
@@ -68,7 +93,7 @@ export function UsersList() {
         </TableHeader>
         <TableBody>
           {isLoading ? (
-            Array.from({ length: 5 }).map((_, i) => (
+            Array.from({ length: PAGE_SIZE }).map((_, i) => (
               <TableRow key={i}>
                 <TableCell><Skeleton className="h-4 w-32" /></TableCell>
                 <TableCell><Skeleton className="h-4 w-48" /></TableCell>
@@ -99,6 +124,26 @@ export function UsersList() {
           )}
         </TableBody>
       </Table>
+       <div className="flex items-center justify-end space-x-2 p-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handlePrevPage}
+          disabled={page === 0 || isLoading}
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleNextPage}
+          disabled={!hasNextPage || isLoading}
+        >
+          Next
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 }

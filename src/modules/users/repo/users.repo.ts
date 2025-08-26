@@ -7,14 +7,23 @@ import { FieldValue } from 'firebase-admin/firestore';
 const usersCollection = firestore.collection('users');
 
 // >>> BEGIN gen:users.list.repo (layer:repo)
-export async function getUsers(): Promise<User[]> {
-  console.log('Repo: Fetching all users from Firestore');
-  const snapshot = await usersCollection.get();
-  if (snapshot.empty) {
-    return [];
+export async function getUsers(limit: number = 10, startAfterDocId?: string): Promise<{users: User[], hasNextPage: boolean}> {
+  console.log('Repo: Fetching users from Firestore with pagination');
+  let query = usersCollection.orderBy('name').limit(limit + 1);
+
+  if (startAfterDocId) {
+    const startAfterDoc = await usersCollection.doc(startAfterDocId).get();
+    if (startAfterDoc.exists) {
+        query = query.startAfter(startAfterDoc);
+    }
   }
-  // Exclude password from the returned data
-  return snapshot.docs.map(doc => {
+
+  const snapshot = await query.get();
+  if (snapshot.empty) {
+    return { users: [], hasNextPage: false };
+  }
+
+  const users = snapshot.docs.map(doc => {
     const { password, ...user } = doc.data();
     return {
         id: doc.id,
@@ -22,6 +31,13 @@ export async function getUsers(): Promise<User[]> {
         enrolled: user.enrolled?.toDate(),
     } as User
   });
+
+  const hasNextPage = users.length > limit;
+  if (hasNextPage) {
+    users.pop(); // Remove the extra document used to check for the next page
+  }
+
+  return { users, hasNextPage };
 }
 // <<< END gen:users.list.repo
 

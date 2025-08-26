@@ -15,6 +15,11 @@ async function http<T>(path: string, options?: HttpOptions): Promise<T> {
       'Content-Type': 'application/json',
       ...options?.headers,
     },
+    // Example of adding revalidation for Next.js caching
+    next: {
+        revalidate: 60, // Revalidate GET requests every 60 seconds
+        ...options?.next,
+    }
   });
 
   if (!response.ok) {

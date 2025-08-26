@@ -1,5 +1,5 @@
 // @module:users @layer:api @owner:studio
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { 
     getUsers as repoGetUsers,
     createUser as repoCreateUser
@@ -8,14 +8,19 @@ import { isModuleEnabled } from '@/modules/registry';
 import { userCreateSchema } from '@/modules/users/service/users.types';
 
 // >>> BEGIN gen:users.api.list (layer:api)
-export async function GET() {
+export async function GET(request: NextRequest) {
   if (!isModuleEnabled('users')) {
     return NextResponse.json({ message: 'Users module is disabled' }, { status: 403 });
   }
 
   try {
-    const users = await repoGetUsers();
-    return NextResponse.json(users);
+    const { searchParams } = new URL(request.url);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
+    const startAfterDocId = searchParams.get('startAfter') || undefined;
+
+    const { users, hasNextPage } = await repoGetUsers(limit, startAfterDocId);
+    
+    return NextResponse.json({ users, hasNextPage });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json({ message }, { status: 500 });
