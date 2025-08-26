@@ -58,7 +58,7 @@ export default function Home() {
                   A dedicated module for viewing and managing student and staff profiles.
                 </p>
               </CardContent>
-            </card>
+            </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium font-body">Layered Architecture</CardTitle>
