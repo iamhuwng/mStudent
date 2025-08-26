@@ -1,0 +1,12 @@
+# STUDIO GLOBAL RULES (reapply on every task)
+- Layers: UI (client) → client services → API routes → repos (server-only) → Firestore.
+- UI must not import `repos`, `firebase-admin`, or `next/server`.
+- Repos: start file with `import 'server-only'`; do NOT use `"use server"`.
+- API routes: JSON only via `NextResponse.json(...)` (never HTML/redirects).
+- Modules live at `src/modules/<name>/{ui,service,api,repo,README.md}`, toggled by `src/modules/registry.ts`.
+- File header (first line): `// @module:<name> @layer:<ui|service|api|repo> @owner:studio`
+- Function markers wrap every generated function:
+  - `// >>> BEGIN gen:<module>.<action> (layer:<layer>)`
+  - `// <<< END gen:<module>.<action>`
+- Keep `docs/CODEMAP.md` + `docs/codemap.json` up to date from markers.
+- App must build with any module disabled in the registry.
