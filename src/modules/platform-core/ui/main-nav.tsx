@@ -38,12 +38,13 @@ function DesktopNav() {
                 <Link
                     key={mod.id}
                     href={mod.path}
-                    className={cn(
+                    passHref
+                    legacyBehavior
+                >
+                  <a className={cn(
                         'transition-colors hover:text-foreground/80',
                         pathname?.startsWith(mod.path) ? 'text-foreground' : 'text-foreground/60'
-                    )}
-                >
-                  {mod.title}
+                    )}>{mod.title}</a>
                 </Link>
             ))}
         </>
