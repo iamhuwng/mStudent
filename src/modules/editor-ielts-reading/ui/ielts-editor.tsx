@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { PlusCircle, Save } from 'lucide-react';
+import { PlusCircle, Save, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { saveIeltsContent } from '../service/ielts.service';
 
@@ -16,7 +16,7 @@ type IeltsEditorProps = {
   material: Material;
 };
 
-// Dummy initial content
+// Dummy initial content for a new material
 const initialContent: IeltsReadingContent = {
     passages: [{ id: 'p1', title: 'Passage 1', text: 'The history of the bicycle...' }],
     tasks: [],
@@ -24,9 +24,14 @@ const initialContent: IeltsReadingContent = {
 
 // >>> BEGIN gen:editor.ielts.reading.ui (layer:ui)
 export function IeltsEditor({ material }: IeltsEditorProps) {
-  const [content, setContent] = useState<IeltsReadingContent>(
-    typeof material.content === 'object' ? material.content : initialContent
-  );
+  const [content, setContent] = useState<IeltsReadingContent>(() => {
+      // Ensure content is a structured object, not a string.
+      if (typeof material.content === 'object' && material.content !== null && 'passages' in material.content) {
+          return material.content as IeltsReadingContent;
+      }
+      return initialContent;
+  });
+
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
@@ -54,7 +59,7 @@ export function IeltsEditor({ material }: IeltsEditorProps) {
         <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold font-headline">IELTS Reading Editor</h2>
             <Button onClick={handleSave} disabled={isSaving}>
-                <Save className="mr-2" />
+                {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2" />}
                 {isSaving ? 'Saving...' : 'Save Content'}
             </Button>
         </div>

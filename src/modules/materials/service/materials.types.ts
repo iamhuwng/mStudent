@@ -32,6 +32,7 @@ const ieltsMultipleChoiceTaskSchema = ieltsTaskBaseSchema.extend({
 const ieltsTaskSchema = z.discriminatedUnion('type', [
   ieltsTrueFalseNotGivenTaskSchema,
   ieltsMultipleChoiceTaskSchema,
+  // Future task types can be added here
 ]);
 
 export const ieltsReadingContentSchema = z.object({
@@ -49,7 +50,8 @@ export const materialSchema = z.object({
   format: z.enum(['quiz', 'video', 'document', 'slide', 'ielts-reading']),
   tags: z.array(z.string()),
   timeLimit: z.number().optional(),
-  content: z.union([z.string(), ieltsReadingContentSchema]),
+  // Use `z.any()` to allow for different content structures
+  content: z.any(),
 });
 
 
@@ -61,7 +63,7 @@ export type Material = {
   format: MaterialFormat;
   tags: string[];
   timeLimit?: number; // in minutes
-  content: string | z.infer<typeof ieltsReadingContentSchema>; // For now, a stub. Could be JSON, markdown, etc.
+  content: string | z.infer<typeof ieltsReadingContentSchema>; // Can be simple text or a complex object
 };
 
 export type IeltsReadingContent = z.infer<typeof ieltsReadingContentSchema>;
