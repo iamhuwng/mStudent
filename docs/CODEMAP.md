@@ -47,3 +47,48 @@ This document provides a map of the generated code in the M'Student application,
 | `users.create.repo` | `createUser` | `repo` | `src/modules/users/repo/users.repo.ts` | - |
 | `users.update.repo`| `updateUser`| `repo` | `src/modules/users/repo/users.repo.ts` | - |
 | `users.delete.repo`| `deleteUser`| `repo` | `src/modules/users/repo/users.repo.ts` | - |
+
+## classes
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `classes.list` | `ClassesList` | `ui` | `src/modules/classes/ui/classes-list.tsx` | - |
+| `classes.detail` | `ClassDetail` | `ui` | `src/modules/classes/ui/class-detail.tsx` | - |
+| `classes.list.service` | `getClasses` | `service` | `src/modules/classes/service/classes.service.ts` | `/api/classes` |
+| `classes.detail.service`| `getClassById` | `service` | `src/modules/classes/service/classes.service.ts` | `/api/classes/:id` |
+| `classes.create.service`| `createClass` | `service` | `src/modules/classes/service/classes.service.ts` | `/api/classes` |
+| `classes.members.service`|`getClassMembers`|`service`|`src/modules/classes/service/classes.service.ts`|`/api/classes/:id/members`|
+| `classes.assign.service`| `assignMemberToClass`|`service`|`src/modules/classes/service/classes.service.ts`|`/api/classes/:id/members`|
+| `classes.api.list` | `GET` | `api` | `src/app/api/classes/route.ts` | `/api/classes` |
+| `classes.api.create` | `POST` | `api` | `src/app/api/classes/route.ts` | `/api/classes` |
+| `classes.api.detail`| `GET` | `api` | `src/app/api/classes/[id]/route.ts`| `/api/classes/:id` |
+| `classes.api.members`| `GET` | `api` | `src/app/api/classes/[id]/members/route.ts`| `/api/classes/:id/members` |
+| `classes.api.assign`| `POST` | `api` | `src/app/api/classes/[id]/members/route.ts`| `/api/classes/:id/members` |
+| `classes.list.repo` | `getClasses` | `repo` | `src/modules/classes/repo/classes.repo.ts` | - |
+| `classes.detail.repo`| `getClassById`| `repo` | `src/modules/classes/repo/classes.repo.ts` | - |
+| `classes.create.repo` | `createClass` | `repo` | `src/modules/classes/repo/classes.repo.ts` | - |
+| `classes.members.repo`|`getClassMembers`|`repo`|`src/modules/classes/repo/classes.repo.ts` | - |
+| `classes.assign.repo`|`assignMemberToClass`|`repo`|`src/modules/classes/repo/classes.repo.ts` | - |
+
+## materials
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `materials.list` | `MaterialsList` | `ui` | `src/modules/materials/ui/materials-list.tsx` | - |
+| `materials.detail`| `MaterialDetail`| `ui` | `src/modules/materials/ui/material-detail.tsx` | - |
+| `materials.preview`| `MaterialPreview`|`ui` | `src/modules/materials/ui/material-preview.tsx`| - |
+| `materials.list.service`| `getMaterials`|`service`|`src/modules/materials/service/materials.service.ts`|`/api/materials`|
+| `materials.detail.service`|`getMaterialById`|`service`|`src/modules/materials/service/materials.service.ts`|`/api/materials/:id`|
+| `materials.create.service`|`createMaterial`|`service`|`src/modules/materials/service/materials.service.ts`|`/api/materials`|
+| `materials.update.service`|`updateMaterial`|`service`|`src/modules/materials/service/materials.service.ts`|`/api/materials/:id`|
+| `materials.delete.service`|`deleteMaterial`|`service`|`src/modules/materials/service/materials.service.ts`|`/api/materials/:id`|
+| `materials.api.list`|`GET`|`api`|`src/app/api/materials/route.ts`|`/api/materials`|
+| `materials.api.create`|`POST`|`api`|`src/app/api/materials/route.ts`|`/api/materials`|
+| `materials.api.detail`|`GET`|`api`|`src/app/api/materials/[id]/route.ts`|`/api/materials/:id`|
+| `materials.api.update`|`PUT`|`api`|`src/app/api/materials/[id]/route.ts`|`/api/materials/:id`|
+| `materials.api.delete`|`DELETE`|`api`|`src/app/api/materials/[id]/route.ts`|`/api/materials/:id`|
+| `materials.list.repo`|`getMaterials`|`repo`|`src/modules/materials/repo/materials.repo.ts`| - |
+| `materials.detail.repo`|`getMaterialById`|`repo`|`src/modules/materials/repo/materials.repo.ts`| - |
+| `materials.create.repo`|`createMaterial`|`repo`|`src/modules/materials/repo/materials.repo.ts`| - |
+| `materials.update.repo`|`updateMaterial`|`repo`|`src/modules/materials/repo/materials.repo.ts`| - |
+| `materials.delete.repo`|`deleteMaterial`|`repo`|`src/modules/materials/repo/materials.repo.ts`| - |
