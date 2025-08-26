@@ -15,7 +15,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Book, GraduationCap, Grid, Home, Settings, Users, PenSquare } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const moduleIcons: { [key: string]: React.ReactElement } = {
   home: <Home />,
@@ -31,6 +31,11 @@ const moduleIcons: { [key: string]: React.ReactElement } = {
 function DesktopNav() {
     const pathname = usePathname();
     const enabledModules = modules.filter((m) => m.enabled && m.inNav);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     return (
         <>
@@ -40,7 +45,7 @@ function DesktopNav() {
                     href={mod.path}
                     className={cn(
                         'transition-colors hover:text-foreground/80',
-                        pathname?.startsWith(mod.path) ? 'text-foreground' : 'text-foreground/60'
+                        isClient && pathname?.startsWith(mod.path) ? 'text-foreground' : 'text-foreground/60'
                     )}>{mod.title}</Link>
             ))}
         </>
