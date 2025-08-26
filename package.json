@@ -10,7 +10,9 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "db:seed": "tsx scripts/seed.ts"
+    "db:seed": "tsx scripts/seed.ts",
+    "test:e2e": "playwright test",
+    "ci:test:e2e": "start-server-and-test dev http://localhost:9002 test:e2e"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.14.1",
@@ -60,11 +62,13 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.45.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "genkit-cli": "^1.14.1",
     "postcss": "^8",
+    "start-server-and-test": "^2.0.4",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.16.2",
     "typescript": "^5"
