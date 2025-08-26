@@ -57,6 +57,16 @@ If a module is disabled:
 *   Its client service will throw a "Module disabled" error, preventing any API calls.
 *   Direct navigation to its pages may result in an error or empty state.
 
+## Initial Setup
+
+Before running the application, you must set up your local environment.
+
+1.  **Create `.env.local`**: Create a file named `.env.local` in the root of the project.
+2.  **Follow Getting Started**: Run the app (`npm run dev`) and navigate to the `/getting-started` page. It will provide the contents for your `.env.local` file and guide you through obtaining your Firebase and Gemini API keys.
+3.  **Create Firestore Database**: In the Firebase Console for your project, navigate to the **Firestore Database** section and click **Create database**. Start in **test mode** for now.
+4.  **Seed the Database**: Once your environment is configured, run `npm run db:seed` in your terminal to populate your database with initial data.
+
+
 ## Code Traceability
 
 Every file in this project includes a header comment for traceability:

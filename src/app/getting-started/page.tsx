@@ -87,6 +87,15 @@ GEMINI_API_KEY="your-gemini-api-key"
                     </Alert>
                 </div>
             </div>
+             <div className="flex items-start gap-4">
+                <Database className="w-6 h-6 mt-1 text-primary"/>
+                <div>
+                    <h3 className="font-semibold">4. Create your Firestore Database</h3>
+                    <p className="text-sm text-muted-foreground">
+                        In the Firebase Console, go to the <strong>Firestore Database</strong> section. Click <strong>"Create database"</strong>. Start in <strong>test mode</strong> for now. This will allow the seed script to work.
+                    </p>
+                </div>
+            </div>
         </CardContent>
       </Card>
       
