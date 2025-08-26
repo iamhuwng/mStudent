@@ -14,7 +14,12 @@ export async function getMaterials(pagination: { page?: number, limit?: number }
     throw new Error('Materials module is disabled.');
   }
   const params = new URLSearchParams(pagination as Record<string, string>);
-  return http<Page<Material>>(`/materials?${params.toString()}`);
+  const response = await http<{data: Material[]}>
+(`/materials?${params.toString()}`);
+  return {
+    items: response.data,
+    hasMore: false, // This API doesn't support pagination properly yet.
+  }
 }
 // <<< END gen:materials.list.service
 

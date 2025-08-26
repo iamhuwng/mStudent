@@ -41,8 +41,8 @@ export function MaterialsList() {
   const fetchMaterials = async () => {
       try {
         setIsLoading(true);
-        const fetchedMaterialsPage: Page<Material> = await getMaterials({ page: 1, limit: 10 });
-        setMaterials(fetchedMaterialsPage.data || []);
+        const fetchedMaterialsPage = await getMaterials({ page: 1, limit: 10 });
+        setMaterials(fetchedMaterialsPage.items || []);
       } catch (error) {
         toast({
           variant: 'destructive',
