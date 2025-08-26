@@ -3,35 +3,46 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+  
+    // Helper function to check if a user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if the user has a specific role
+    function hasRole(role) {
+      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role;
+    }
+    
+    // Helper function to check if the user is an admin
+    function isAdmin() {
+      return hasRole('admin');
+    }
 
     // >>> BEGIN gen:rules.users (layer:repo)
+    // Users can only read their own data.
+    // Admins can read and write any user data.
     match /users/{userId} {
-      // Allow users to read their own data.
-      // Allow admins to read anyone's data.
-      allow read: if request.auth.uid == userId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-      
-      // Allow admins to write to any user document.
-      allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAdmin();
     }
     // <<< END gen:rules.users
 
     // >>> BEGIN gen:rules.classes (layer:repo)
+    // Authenticated users can read class lists and details.
+    // Only admins or teachers can create/update/delete classes.
     match /classes/{classId} {
-        // Allow any authenticated user to read class information.
-        allow read: if request.auth != null;
-        
-        // Only allow teachers or admins to create/update/delete classes.
-        allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['teacher', 'admin'];
+      allow read: if isAuthenticated();
+      allow write: if hasRole('admin') || hasRole('teacher');
     }
     // <<< END gen:rules.classes
     
     // >>> BEGIN gen:rules.materials (layer:repo)
+    // Authenticated users can read materials.
+    // Only admins or teachers can create/update/delete materials.
     match /materials/{materialId} {
-        // Allow any authenticated user to read materials.
-        allow read: if request.auth != null;
-
-        // Only allow teachers or admins to create/update/delete materials.
-        allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['teacher', 'admin'];
+      allow read: if isAuthenticated();
+      allow write: if hasRole('admin') || hasRole('teacher');
     }
     // <<< END gen:rules.materials
 
