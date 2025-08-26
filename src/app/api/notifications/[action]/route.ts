@@ -1,12 +1,12 @@
 // @module:deadlines-notifications @layer:api @owner:studio
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { isModuleEnabled } from '@/modules/registry';
 import * as repo from '@/modules/deadlines-notifications/repo/deadlines.repo';
 
 // >>> BEGIN gen:deadlines.api (layer:api)
 export async function GET(
   request: Request,
-  { params }: { params: { action: string } }
+  { params }: { params: { action: string, userId?: string } }
 ) {
   if (!isModuleEnabled('deadlines-notifications')) {
     return NextResponse.json({ message: 'Deadlines module is disabled' }, { status: 403 });
@@ -34,6 +34,32 @@ export async function POST(
     return new NextResponse(null, { status: 204 });
   }
 
+  if (params.action === 'process') {
+    const result = await repo.processAndNotifyDeadlines();
+    return NextResponse.json(result);
+  }
+
   return NextResponse.json({ message: 'Unknown action' }, { status: 404 });
 }
 // <<< END gen:deadlines.api
+
+
+// This should be in its own file like /api/notifications/for-user/[userId]/route.ts
+// but for simplicity in this task, we'll add it here.
+
+export async function handleUserNotifications(
+  request: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  if (!isModuleEnabled('deadlines-notifications')) {
+    return NextResponse.json({ message: 'Deadlines module is disabled' }, { status: 403 });
+  }
+  
+  try {
+    const notifications = await repo.getNotificationsForUser(params.userId);
+    return NextResponse.json(notifications);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    return NextResponse.json({ message }, { status: 500 });
+  }
+}

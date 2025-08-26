@@ -8,14 +8,14 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
-import { computeDeadlines } from '@/modules/deadlines-notifications/service/deadlines.service';
+import { Terminal, Bell, AlertTriangle } from 'lucide-react';
+import { getNotificationsForUser } from '@/modules/deadlines-notifications/service/deadlines.service';
 import { Badge } from '@/components/ui/badge';
 
 // >>> BEGIN gen:student.home.aggregate.ui (layer:ui)
 export function StudentHome({ studentId }: { studentId: string }) {
   const [data, setData] = useState<StudentHomeData | null>(null);
-  const [deadlines, setDeadlines] = useState<any>(null);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
@@ -26,12 +26,14 @@ export function StudentHome({ studentId }: { studentId: string }) {
     async function fetchData() {
       try {
         setIsLoading(true);
-        const [studentData, deadlinesData] = await Promise.all([
+        const promises = [
           getStudentHomeData(studentId),
-          deadlinesEnabled ? computeDeadlines() : Promise.resolve(null)
-        ]);
-        setData(studentData);
-        setDeadlines(deadlinesData);
+          deadlinesEnabled ? getNotificationsForUser(studentId) : Promise.resolve([])
+        ];
+        const [studentData, notificationsData] = await Promise.all(promises);
+
+        setData(studentData as StudentHomeData);
+        setNotifications(notificationsData as any[]);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'An unknown error occurred.';
         setError(message);
@@ -89,6 +91,17 @@ export function StudentHome({ studentId }: { studentId: string }) {
             <CardTitle className="text-3xl font-headline">Welcome, {data.user.name}</CardTitle>
             <CardDescription>Here's what's new for you.</CardDescription>
             </CardHeader>
+             {notifications.length > 0 && (
+                <CardContent>
+                    {notifications.map(n => (
+                        <Alert key={n.id} variant={n.message.includes('overdue') ? 'destructive' : 'default'}>
+                            {n.message.includes('overdue') ? <AlertTriangle className="h-4 w-4" /> : <Bell className="h-4 w-4" />}
+                            <AlertTitle>Deadline Alert</AlertTitle>
+                            <AlertDescription>{n.message}</AlertDescription>
+                        </Alert>
+                    ))}
+                </CardContent>
+            )}
         </Card>
       )}
       {isModuleEnabled('assignments') && data?.assignments?.items && data.assignments.items.length > 0 && (
@@ -99,8 +112,11 @@ export function StudentHome({ studentId }: { studentId: string }) {
           </CardHeader>
           <CardContent>
             <p>You have {data.assignments.items.length} assignments.</p>
-            {deadlinesEnabled && deadlines?.upcoming?.length > 0 && (
-                <p><Badge>{deadlines.upcoming.length} due soon</Badge></p>
+            {notifications.filter(n=>n.message.includes('soon')).length > 0 && (
+                 <Badge className="mt-2">{notifications.filter(n=>n.message.includes('soon')).length} due soon</Badge>
+            )}
+            {notifications.filter(n=>n.message.includes('overdue')).length > 0 && (
+                 <Badge variant="destructive" className="mt-2 ml-1">{notifications.filter(n=>n.message.includes('overdue')).length} overdue</Badge>
             )}
           </CardContent>
         </Card>

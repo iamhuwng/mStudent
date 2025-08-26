@@ -175,6 +175,10 @@ This document provides a map of the generated code in the M'Student application,
 | `deadlines.api` | `GET`, `POST` | `api` | `src/app/api/notifications/[action]/route.ts` | `/api/notifications/*` |
 | `deadlines.compute.repo` | `computeDeadlines` | `repo` | `src/modules/deadlines-notifications/repo/deadlines.repo.ts` | - |
 | `deadlines.notify.repo` | `notifyUser` | `repo` | `src/modules/deadlines-notifications/repo/deadlines.repo.ts` | - |
+| `deadlines.process.repo` | `processAndNotifyDeadlines` | `repo` | `src/modules/deadlines-notifications/repo/deadlines.repo.ts` | - |
+| `deadlines.getNotifications.repo`| `getNotificationsForUser` | `repo` | `src/modules/deadlines-notifications/repo/deadlines.repo.ts` | - |
+| `deadlines.getNotifications.service`| `getNotificationsForUser` | `service` | `src/modules/deadlines-notifications/service/deadlines.service.ts` | `/api/notifications/for-user/:userId`|
+| `deadlines.getNotifications.api` | `GET` | `api` | `src/app/api/notifications/for-user/[userId]/route.ts` | `/api/notifications/for-user/:userId` |
 
 ## editor-ielts-reading
 

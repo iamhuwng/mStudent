@@ -886,12 +886,28 @@
     "routes": ["/api/notifications/notify"],
     "callers": []
   },
+    "deadlines.getNotifications.service": {
+    "file": "src/modules/deadlines-notifications/service/deadlines.service.ts",
+    "export": "getNotificationsForUser",
+    "layer": "service",
+    "module": "deadlines-notifications",
+    "routes": ["/api/notifications/for-user/:userId"],
+    "callers": ["src/modules/student-home/ui/student-home.tsx"]
+  },
   "deadlines.api": {
     "file": "src/app/api/notifications/[action]/route.ts",
     "export": "GET, POST",
     "layer": "api",
     "module": "deadlines-notifications",
     "routes": ["/api/notifications/compute", "/api/notifications/notify"],
+    "callers": ["src/modules/deadlines-notifications/service/deadlines.service.ts"]
+  },
+    "deadlines.getNotifications.api": {
+    "file": "src/app/api/notifications/for-user/[userId]/route.ts",
+    "export": "GET",
+    "layer": "api",
+    "module": "deadlines-notifications",
+    "routes": ["/api/notifications/for-user/:userId"],
     "callers": ["src/modules/deadlines-notifications/service/deadlines.service.ts"]
   },
   "deadlines.compute.repo": {
@@ -909,6 +925,22 @@
     "module": "deadlines-notifications",
     "routes": [],
     "callers": ["src/app/api/notifications/[action]/route.ts"]
+  },
+    "deadlines.process.repo": {
+    "file": "src/modules/deadlines-notifications/repo/deadlines.repo.ts",
+    "export": "processAndNotifyDeadlines",
+    "layer": "repo",
+    "module": "deadlines-notifications",
+    "routes": [],
+    "callers": ["src/app/api/notifications/[action]/route.ts"]
+  },
+    "deadlines.getNotifications.repo": {
+    "file": "src/modules/deadlines-notifications/repo/deadlines.repo.ts",
+    "export": "getNotificationsForUser",
+    "layer": "repo",
+    "module": "deadlines-notifications",
+    "routes": [],
+    "callers": ["src/app/api/notifications/for-user/[userId]/route.ts"]
   },
   "editor.ielts.reading.save": {
     "file": "src/modules/editor-ielts-reading/service/ielts.service.ts",

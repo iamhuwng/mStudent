@@ -19,3 +19,10 @@ export async function notifyUser(userId: string, notification: any): Promise<any
     return http<any>('/notifications/notify', { method: 'POST', body: JSON.stringify({ userId, notification }) });
 }
 // <<< END gen:deadlines.notify
+
+// >>> BEGIN gen:deadlines.getNotifications (layer:service)
+export async function getNotificationsForUser(userId: string): Promise<any[]> {
+    if (!isModuleEnabled(MODULE_ID)) return [];
+    return http<any[]>(`/notifications/for-user/${userId}`);
+}
+// <<< END gen:deadlines.getNotifications

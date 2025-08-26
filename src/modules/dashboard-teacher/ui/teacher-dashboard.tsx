@@ -33,7 +33,7 @@ export function TeacherDashboard() {
             deadlinesEnabled ? computeDeadlines() : Promise.resolve(null)
         ]);
         setData(dashboardData);
-        setDeadlines(deadlinesData);
+        if (deadlinesData) setDeadlines(deadlinesData);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'An unknown error occurred.';
         setError(message);
@@ -96,7 +96,7 @@ export function TeacherDashboard() {
           <CardContent>
             <p>Showing {data.assignments.items.length} assignments.</p>
             {deadlinesEnabled && deadlines?.overdue?.length > 0 && (
-                <p><Badge variant="destructive">{deadlines.overdue.length} overdue</Badge></p>
+                <p className="mt-2"><Badge variant="destructive">{deadlines.overdue.length} overdue</Badge></p>
             )}
           </CardContent>
         </Card>
