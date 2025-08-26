@@ -10,18 +10,18 @@ import { logApiRequest, logApiResponse } from '@/lib/logging';
 
 // >>> BEGIN gen:activity.log (layer:api)
 export async function POST(request: Request) {
-    const reqId = logApiRequest(request);
+    const { requestId, startTime } = logApiRequest(request);
     // Note: The repo function itself checks if the module is enabled.
     // This allows other server modules to call it without breaking if disabled.
     try {
         const body = await request.json();
         await repoLogActivity(body);
-        logApiResponse(reqId, request, { status: 204, body: null });
+        logApiResponse(requestId, startTime, request, { status: 204, body: null });
         return new NextResponse(null, { status: 204 });
     } catch (error) {
         const message = error instanceof Error ? error.message : 'An unknown error occurred';
-        const response = { message, reqId };
-        logApiResponse(reqId, request, { status: 400, body: response });
+        const response = { ok: false, error: message, rid: requestId };
+        logApiResponse(requestId, startTime, request, { status: 400, body: response });
         return NextResponse.json(response, { status: 400 });
     }
 }
@@ -29,10 +29,10 @@ export async function POST(request: Request) {
 
 // >>> BEGIN gen:activity.list (layer:api)
 export async function GET(request: NextRequest) {
-  const reqId = logApiRequest(request);
+  const { requestId, startTime } = logApiRequest(request);
   if (!isModuleEnabled('activity')) {
-    const response = { message: 'Activity module is disabled', reqId };
-    logApiResponse(reqId, request, { status: 403, body: response });
+    const response = { ok: false, error: 'Activity module is disabled', rid: requestId };
+    logApiResponse(requestId, startTime, request, { status: 403, body: response });
     return NextResponse.json(response, { status: 403 });
   }
 
@@ -48,13 +48,13 @@ export async function GET(request: NextRequest) {
 
   try {
     const activity = await repoGetActivity(filters, pagination);
-    const response = { ...activity, reqId };
-    logApiResponse(reqId, request, { status: 200, body: response });
+    const response = { ...activity, rid: requestId };
+    logApiResponse(requestId, startTime, request, { status: 200, body: response });
     return NextResponse.json(response);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
-    const response = { message, reqId };
-    logApiResponse(reqId, request, { status: 500, body: response });
+    const response = { ok: false, error: message, rid: requestId };
+    logApiResponse(requestId, startTime, request, { status: 500, body: response });
     return NextResponse.json(response, { status: 500 });
   }
 }
@@ -62,10 +62,10 @@ export async function GET(request: NextRequest) {
 
 // >>> BEGIN gen:activity.prune (layer:api)
 export async function DELETE(request: NextRequest) {
-    const reqId = logApiRequest(request);
+    const { requestId, startTime } = logApiRequest(request);
     if (!isModuleEnabled('activity')) {
-        const response = { message: 'Activity module is disabled', reqId };
-        logApiResponse(reqId, request, { status: 403, body: response });
+        const response = { ok: false, error: 'Activity module is disabled', rid: requestId };
+        logApiResponse(requestId, startTime, request, { status: 403, body: response });
         return NextResponse.json(response, { status: 403 });
     }
 
@@ -73,20 +73,20 @@ export async function DELETE(request: NextRequest) {
     const beforeParam = searchParams.get('before');
 
     if (!beforeParam) {
-        const response = { message: 'Missing "before" date parameter', reqId };
-        logApiResponse(reqId, request, { status: 400, body: response });
+        const response = { ok: false, error: 'Missing "before" date parameter', rid: requestId };
+        logApiResponse(requestId, startTime, request, { status: 400, body: response });
         return NextResponse.json(response, { status: 400 });
     }
     
     try {
         const before = new Date(beforeParam);
         await repoPruneActivity(before);
-        logApiResponse(reqId, request, { status: 204, body: null });
+        logApiResponse(requestId, startTime, request, { status: 204, body: null });
         return new NextResponse(null, { status: 204 });
     } catch (error) {
         const message = error instanceof Error ? error.message : 'An unknown error occurred';
-        const response = { message, reqId };
-        logApiResponse(reqId, request, { status: 500, body: response });
+        const response = { ok: false, error: message, rid: requestId };
+        logApiResponse(requestId, startTime, request, { status: 500, body: response });
         return NextResponse.json(response, { status: 500 });
     }
 }

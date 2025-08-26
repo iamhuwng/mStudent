@@ -30,17 +30,17 @@ async function http<T>(path: string, options?: HttpOptions): Promise<T> {
       try {
         errorData = await response.json();
       } catch (e) {
-        errorData = { message: `Request failed with status ${response.status} but failed to parse JSON error response.` };
+        errorData = { error: `Request failed with status ${response.status} but failed to parse JSON error response.` };
       }
     } else {
        const text = await response.text();
-       errorData = { message: `Request failed with status ${response.status}. Server returned non-JSON response: ${text.substring(0, 400)}` };
+       errorData = { error: `Request failed with status ${response.status}. Server returned non-JSON response: ${text.substring(0, 400)}` };
     }
 
     // Include reqId in the error message if available
-    const message = errorData.message || 'An unknown error occurred';
-    const reqId = errorData.reqId ? ` (Request ID: ${errorData.reqId})` : '';
-    throw new Error(`${message}${reqId}`);
+    const message = errorData.error || 'An unknown error occurred';
+    const rid = errorData.rid ? ` (Request ID: ${errorData.rid})` : '';
+    throw new Error(`${message}${rid}`);
   }
 
   // Handle cases with no content

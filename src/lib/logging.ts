@@ -17,8 +17,9 @@ function log(level: 'info' | 'error', event: string, requestId: string, details:
     }));
 }
 
-export function logApiRequest(request: Request | NextRequest) {
+export function logApiRequest(request: Request | NextRequest): { requestId: string, startTime: number } {
   const requestId = getRequestId(request);
+  const startTime = Date.now();
   const { method, url } = request;
   const { pathname, searchParams } = new URL(url);
 
@@ -31,14 +32,16 @@ export function logApiRequest(request: Request | NextRequest) {
       }
   });
 
-  return requestId;
+  return { requestId, startTime };
 }
 
 export function logApiResponse(
-    requestId: string, 
+    requestId: string,
+    startTime: number,
     request: Request | NextRequest,
     response: { status: number; body: any }
 ) {
+    const durationMs = Date.now() - startTime;
     const { method, url } = request;
     const { pathname } = new URL(url);
     const event = response.status >= 400 ? 'API Request Error' : 'API Request Success';
@@ -47,6 +50,7 @@ export function logApiResponse(
     log(level, event, requestId, {
         req: { method, url, pathname },
         res: response,
+        durationMs,
     });
 }
 // <<< END gen:core.logging

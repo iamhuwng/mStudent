@@ -7,26 +7,26 @@ import { z } from 'zod';
 
 // >>> BEGIN gen:classes.list.api (layer:api)
 export async function GET(request: NextRequest) {
-  const reqId = logApiRequest(request);
+  const { requestId, startTime } = logApiRequest(request);
   const { searchParams } = new URL(request.url);
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 10;
   
   if (!isModuleEnabled('classes')) {
-    const response = { message: 'Classes module is disabled', reqId };
-    logApiResponse(reqId, request, { status: 403, body: response });
+    const response = { ok: false, error: 'Classes module is disabled', rid: requestId };
+    logApiResponse(requestId, startTime, request, { status: 403, body: response });
     return NextResponse.json(response, { status: 403 });
   }
 
   try {
     const classes = await repoGetClasses({ page, limit });
-    const response = { data: classes, reqId };
-    logApiResponse(reqId, request, { status: 200, body: response });
+    const response = { data: classes, rid: requestId };
+    logApiResponse(requestId, startTime, request, { status: 200, body: response });
     return NextResponse.json(response);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
-    const response = { message, reqId };
-    logApiResponse(reqId, request, { status: 500, body: response });
+    const response = { ok: false, error: message, rid: requestId };
+    logApiResponse(requestId, startTime, request, { status: 500, body: response });
     return NextResponse.json(response, { status: 500 });
   }
 }
@@ -39,10 +39,10 @@ const createClassSchema = z.object({
 
 // >>> BEGIN gen:classes.create.api (layer:api)
 export async function POST(request: Request) {
-    const reqId = logApiRequest(request);
+    const { requestId, startTime } = logApiRequest(request);
     if (!isModuleEnabled('classes')) {
-        const response = { message: 'Classes module is disabled', reqId };
-        logApiResponse(reqId, request, { status: 403, body: response });
+        const response = { ok: false, error: 'Classes module is disabled', rid: requestId };
+        logApiResponse(requestId, startTime, request, { status: 403, body: response });
         return NextResponse.json(response, { status: 403 });
     }
     
@@ -50,13 +50,13 @@ export async function POST(request: Request) {
       const body = await request.json();
       const classData = createClassSchema.parse(body);
       const newClass = await repoCreateClass(classData);
-      const response = { data: newClass, reqId };
-      logApiResponse(reqId, request, { status: 201, body: response });
+      const response = { data: newClass, rid: requestId };
+      logApiResponse(requestId, startTime, request, { status: 201, body: response });
       return NextResponse.json(response, { status: 201 });
     } catch (error) {
       const message = error instanceof z.ZodError ? error.errors : (error instanceof Error ? error.message : 'An unknown error occurred');
-      const response = { message, reqId };
-      logApiResponse(reqId, request, { status: 400, body: response });
+      const response = { ok: false, error: message, rid: requestId };
+      logApiResponse(requestId, startTime, request, { status: 400, body: response });
       return NextResponse.json(response, { status: 400 });
     }
 }
