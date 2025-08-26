@@ -147,3 +147,15 @@ This document provides a map of the generated code in the M'Student application,
 |---|---|---|---|---|
 | `student.home.aggregate.service` | `getStudentHomeData` | `service` | `src/modules/student-home/service/student-home.service.ts` | - |
 | `student.home.aggregate.ui` | `StudentHome` | `ui` | `src/modules/student-home/ui/student-home.tsx` | - |
+
+## flashcards
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `flashcards.set.create` | `createFlashcardSet` | `service` | `src/modules/flashcards/service/flashcards.service.ts` | `/api/flashcards/sets` |
+| `flashcards.card.create` | `createFlashcard` | `service` | `src/modules/flashcards/service/flashcards.service.ts` | `/api/flashcards/cards` |
+| `flashcards.progress.mark` | `markFlashcardProgress` | `service` | `src/modules/flashcards/service/flashcards.service.ts` | `/api/flashcards/progress` |
+| `flashcards.api` | `POST` | `api` | `src/app/api/flashcards/[entity]/route.ts` | `/api/flashcards/*` |
+| `flashcards.set.create` | `createFlashcardSet` | `repo` | `src/modules/flashcards/repo/flashcards.repo.ts` | - |
+| `flashcards.card.create` | `createFlashcard` | `repo` | `src/modules/flashcards/repo/flashcards.repo.ts` | - |
+| `flashcards.progress.mark` | `markFlashcardProgress` | `repo` | `src/modules/flashcards/repo/flashcards.repo.ts` | - |

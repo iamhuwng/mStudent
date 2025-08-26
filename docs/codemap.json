@@ -773,5 +773,61 @@
     "module": "student-home",
     "routes": [],
     "callers": ["src/app/dashboard/student/page.tsx"]
+  },
+  "flashcards.set.create.service": {
+    "file": "src/modules/flashcards/service/flashcards.service.ts",
+    "export": "createFlashcardSet",
+    "layer": "service",
+    "module": "flashcards",
+    "routes": ["/api/flashcards/sets"],
+    "callers": []
+  },
+  "flashcards.card.create.service": {
+    "file": "src/modules/flashcards/service/flashcards.service.ts",
+    "export": "createFlashcard",
+    "layer": "service",
+    "module": "flashcards",
+    "routes": ["/api/flashcards/cards"],
+    "callers": []
+  },
+  "flashcards.progress.mark.service": {
+    "file": "src/modules/flashcards/service/flashcards.service.ts",
+    "export": "markFlashcardProgress",
+    "layer": "service",
+    "module": "flashcards",
+    "routes": ["/api/flashcards/progress"],
+    "callers": []
+  },
+  "flashcards.api": {
+    "file": "src/app/api/flashcards/[entity]/route.ts",
+    "export": "POST",
+    "layer": "api",
+    "module": "flashcards",
+    "routes": ["/api/flashcards/*"],
+    "callers": ["src/modules/flashcards/service/flashcards.service.ts"]
+  },
+  "flashcards.set.create.repo": {
+    "file": "src/modules/flashcards/repo/flashcards.repo.ts",
+    "export": "createFlashcardSet",
+    "layer": "repo",
+    "module": "flashcards",
+    "routes": [],
+    "callers": ["src/app/api/flashcards/[entity]/route.ts"]
+  },
+  "flashcards.card.create.repo": {
+    "file": "src/modules/flashcards/repo/flashcards.repo.ts",
+    "export": "createFlashcard",
+    "layer": "repo",
+    "module": "flashcards",
+    "routes": [],
+    "callers": ["src/app/api/flashcards/[entity]/route.ts"]
+  },
+  "flashcards.progress.mark.repo": {
+    "file": "src/modules/flashcards/repo/flashcards.repo.ts",
+    "export": "markFlashcardProgress",
+    "layer": "repo",
+    "module": "flashcards",
+    "routes": [],
+    "callers": ["src/app/api/flashcards/[entity]/route.ts"]
   }
 }
