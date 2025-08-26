@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Book, GraduationCap, Grid, Home, Settings, Users } from 'lucide-react';
+import { Book, GraduationCap, Grid, Home, Settings, Users, PenSquare } from 'lucide-react';
 import React from 'react';
 
 const moduleIcons: { [key: string]: React.ReactElement } = {
@@ -23,6 +23,7 @@ const moduleIcons: { [key: string]: React.ReactElement } = {
   users: <Users />,
   classes: <Users />,
   materials: <Book />,
+  flashcards: <PenSquare />,
   settings: <Settings />,
 };
 
@@ -42,7 +43,7 @@ function DesktopNav() {
                         pathname?.startsWith(mod.path) ? 'text-foreground' : 'text-foreground/60'
                     )}
                 >
-                    {mod.title}
+                  {mod.title}
                 </Link>
             ))}
         </>
