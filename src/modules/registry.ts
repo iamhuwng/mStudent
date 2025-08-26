@@ -24,14 +24,44 @@ export const modules: Module[] = [
   {
     id: 'classes',
     title: 'Classes',
-    enabled: false,
+    enabled: true,
     path: '/classes',
   },
   {
     id: 'materials',
     title: 'Materials',
-    enabled: false,
+    enabled: true,
     path: '/materials',
+  },
+  {
+    id: 'assignments',
+    title: 'Assignments',
+    enabled: false,
+    path: '/assignments',
+  },
+  {
+    id: 'submissions-grading',
+    title: 'Submissions',
+    enabled: false,
+    path: '/submissions',
+  },
+  {
+    id: 'activity',
+    title: 'Activity Log',
+    enabled: false,
+    path: '/activity',
+  },
+  {
+    id: 'dashboard-teacher',
+    title: 'Teacher Dashboard',
+    enabled: false,
+    path: '/dashboard/teacher',
+  },
+  {
+    id: 'student-home',
+    title: 'Student Dashboard',
+    enabled: false,
+    path: '/dashboard/student',
   },
 ];
 

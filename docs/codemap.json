@@ -29,7 +29,6 @@
     "export": "http",
     "layer": "service",
     "module": "platform-core",
-    "routes": [],
     "callers": [
       "src/modules/auth-session/service/session.service.ts",
       "src/modules/users/service/users.service.ts"
@@ -510,5 +509,269 @@
     "module": "materials",
     "routes": [],
     "callers": ["src/app/api/materials/[id]/route.ts"]
+  },
+  "assignments.create.service": {
+    "file": "src/modules/assignments/service/assignments.service.ts",
+    "export": "createAssignment",
+    "layer": "service",
+    "module": "assignments",
+    "routes": ["/api/assignments"],
+    "callers": []
+  },
+  "assignments.list.forStudent": {
+    "file": "src/modules/assignments/service/assignments.service.ts",
+    "export": "getAssignmentsForStudent",
+    "layer": "service",
+    "module": "assignments",
+    "routes": ["/api/assignments"],
+    "callers": ["src/modules/student-home/service/student-home.service.ts"]
+  },
+  "assignments.list.forClass": {
+    "file": "src/modules/assignments/service/assignments.service.ts",
+    "export": "getAssignmentsForClass",
+    "layer": "service",
+    "module": "assignments",
+    "routes": ["/api/assignments"],
+    "callers": ["src/modules/dashboard-teacher/service/dashboard.service.ts"]
+  },
+  "assignments.delete.service": {
+    "file": "src/modules/assignments/service/assignments.service.ts",
+    "export": "deleteAssignment",
+    "layer": "service",
+    "module": "assignments",
+    "routes": ["/api/assignments/:id"],
+    "callers": []
+  },
+  "assignments.create": {
+    "file": "src/app/api/assignments/route.ts",
+    "export": "POST",
+    "layer": "api",
+    "module": "assignments",
+    "routes": ["/api/assignments"],
+    "callers": ["src/modules/assignments/service/assignments.service.ts"]
+  },
+  "assignments.list": {
+    "file": "src/app/api/assignments/route.ts",
+    "export": "GET",
+    "layer": "api",
+    "module": "assignments",
+    "routes": ["/api/assignments"],
+    "callers": ["src/modules/assignments/service/assignments.service.ts"]
+  },
+  "assignments.delete": {
+    "file": "src/app/api/assignments/[id]/route.ts",
+    "export": "DELETE",
+    "layer": "api",
+    "module": "assignments",
+    "routes": ["/api/assignments/:id"],
+    "callers": ["src/modules/assignments/service/assignments.service.ts"]
+  },
+  "assignments.create.repo": {
+    "file": "src/modules/assignments/repo/assignments.repo.ts",
+    "export": "createAssignment",
+    "layer": "repo",
+    "module": "assignments",
+    "routes": [],
+    "callers": ["src/app/api/assignments/route.ts"]
+  },
+  "assignments.list.forStudent.repo": {
+    "file": "src/modules/assignments/repo/assignments.repo.ts",
+    "export": "getAssignmentsForStudent",
+    "layer": "repo",
+    "module": "assignments",
+    "routes": [],
+    "callers": ["src/app/api/assignments/route.ts"]
+  },
+  "assignments.list.forClass.repo": {
+    "file": "src/modules/assignments/repo/assignments.repo.ts",
+    "export": "getAssignmentsForClass",
+    "layer": "repo",
+    "module": "assignments",
+    "routes": [],
+    "callers": ["src/app/api/assignments/route.ts"]
+  },
+  "assignments.delete.repo": {
+    "file": "src/modules/assignments/repo/assignments.repo.ts",
+    "export": "deleteAssignment",
+    "layer": "repo",
+    "module": "assignments",
+    "routes": [],
+    "callers": ["src/app/api/assignments/[id]/route.ts"]
+  },
+  "submissions.create.service": {
+    "file": "src/modules/submissions-grading/service/submissions.service.ts",
+    "export": "createSubmission",
+    "layer": "service",
+    "module": "submissions-grading",
+    "routes": ["/api/submissions"],
+    "callers": []
+  },
+  "submissions.list.ungraded": {
+    "file": "src/modules/submissions-grading/service/submissions.service.ts",
+    "export": "getUngradedSubmissions",
+    "layer": "service",
+    "module": "submissions-grading",
+    "routes": ["/api/submissions"],
+    "callers": ["src/modules/dashboard-teacher/service/dashboard.service.ts"]
+  },
+  "submissions.grade.service": {
+    "file": "src/modules/submissions-grading/service/submissions.service.ts",
+    "export": "gradeSubmission",
+    "layer": "service",
+    "module": "submissions-grading",
+    "routes": ["/api/submissions/:id/grade"],
+    "callers": []
+  },
+  "submissions.create": {
+    "file": "src/app/api/submissions/route.ts",
+    "export": "POST",
+    "layer": "api",
+    "module": "submissions-grading",
+    "routes": ["/api/submissions"],
+    "callers": ["src/modules/submissions-grading/service/submissions.service.ts"]
+  },
+  "submissions.list": {
+    "file": "src/app/api/submissions/route.ts",
+    "export": "GET",
+    "layer": "api",
+    "module": "submissions-grading",
+    "routes": ["/api/submissions"],
+    "callers": ["src/modules/submissions-grading/service/submissions.service.ts"]
+  },
+  "submissions.grade": {
+    "file": "src/app/api/submissions/[id]/grade/route.ts",
+    "export": "PUT",
+    "layer": "api",
+    "module": "submissions-grading",
+    "routes": ["/api/submissions/:id/grade"],
+    "callers": ["src/modules/submissions-grading/service/submissions.service.ts"]
+  },
+  "submissions.create.repo": {
+    "file": "src/modules/submissions-grading/repo/submissions.repo.ts",
+    "export": "createSubmission",
+    "layer": "repo",
+    "module": "submissions-grading",
+    "routes": [],
+    "callers": ["src/app/api/submissions/route.ts"]
+  },
+  "submissions.list.ungraded.repo": {
+    "file": "src/modules/submissions-grading/repo/submissions.repo.ts",
+    "export": "getUngradedSubmissions",
+    "layer": "repo",
+    "module": "submissions-grading",
+    "routes": [],
+    "callers": ["src/app/api/submissions/route.ts"]
+  },
+  "submissions.grade.repo": {
+    "file": "src/modules/submissions-grading/repo/submissions.repo.ts",
+    "export": "gradeSubmission",
+    "layer": "repo",
+    "module": "submissions-grading",
+    "routes": [],
+    "callers": ["src/app/api/submissions/[id]/grade/route.ts"]
+  },
+  "activity.log.service": {
+    "file": "src/modules/activity/service/activity.service.ts",
+    "export": "logActivity",
+    "layer": "service",
+    "module": "activity",
+    "routes": ["/api/activity"],
+    "callers": []
+  },
+  "activity.list.service": {
+    "file": "src/modules/activity/service/activity.service.ts",
+    "export": "getActivity",
+    "layer": "service",
+    "module": "activity",
+    "routes": ["/api/activity"],
+    "callers": ["src/modules/dashboard-teacher/service/dashboard.service.ts"]
+  },
+  "activity.prune.service": {
+    "file": "src/modules/activity/service/activity.service.ts",
+    "export": "pruneActivity",
+    "layer": "service",
+    "module": "activity",
+    "routes": ["/api/activity"],
+    "callers": []
+  },
+  "activity.log": {
+    "file": "src/app/api/activity/route.ts",
+    "export": "POST",
+    "layer": "api",
+    "module": "activity",
+    "routes": ["/api/activity"],
+    "callers": ["src/modules/activity/service/activity.service.ts"]
+  },
+  "activity.list": {
+    "file": "src/app/api/activity/route.ts",
+    "export": "GET",
+    "layer": "api",
+    "module": "activity",
+    "routes": ["/api/activity"],
+    "callers": ["src/modules/activity/service/activity.service.ts"]
+  },
+  "activity.prune": {
+    "file": "src/app/api/activity/route.ts",
+    "export": "DELETE",
+    "layer": "api",
+    "module": "activity",
+    "routes": ["/api/activity"],
+    "callers": ["src/modules/activity/service/activity.service.ts"]
+  },
+  "activity.log.repo": {
+    "file": "src/modules/activity/repo/activity.repo.ts",
+    "export": "logActivity",
+    "layer": "repo",
+    "module": "activity",
+    "routes": [],
+    "callers": ["src/app/api/activity/route.ts"]
+  },
+  "activity.list.repo": {
+    "file": "src/modules/activity/repo/activity.repo.ts",
+    "export": "getActivity",
+    "layer": "repo",
+    "module": "activity",
+    "routes": [],
+    "callers": ["src/app/api/activity/route.ts"]
+  },
+  "activity.prune.repo": {
+    "file": "src/modules/activity/repo/activity.repo.ts",
+    "export": "pruneActivity",
+    "layer": "repo",
+    "module": "activity",
+    "routes": [],
+    "callers": ["src/app/api/activity/route.ts"]
+  },
+  "dashboard.teacher.aggregate.service": {
+    "file": "src/modules/dashboard-teacher/service/dashboard.service.ts",
+    "export": "getTeacherDashboardData",
+    "layer": "service",
+    "module": "dashboard-teacher",
+    "routes": [],
+    "callers": ["src/modules/dashboard-teacher/ui/teacher-dashboard.tsx"]
+  },
+  "dashboard.teacher.aggregate.ui": {
+    "file": "src/modules/dashboard-teacher/ui/teacher-dashboard.tsx",
+    "export": "TeacherDashboard",
+    "layer": "ui",
+    "module": "dashboard-teacher",
+    "routes": [],
+    "callers": ["src/app/dashboard/teacher/page.tsx"]
+  },
+  "student.home.aggregate.service": {
+    "file": "src/modules/student-home/service/student-home.service.ts",
+    "export": "getStudentHomeData",
+    "layer": "service",
+    "module": "student-home",
+    "routes": [],
+    "callers": ["src/modules/student-home/ui/student-home.tsx"]
+  },
+  "student.home.aggregate.ui": {
+    "file": "src/modules/student-home/ui/student-home.tsx",
+    "export": "StudentHome",
+    "layer": "ui",
+    "module": "student-home",
+    "routes": [],
+    "callers": ["src/app/dashboard/student/page.tsx"]
   }
 }

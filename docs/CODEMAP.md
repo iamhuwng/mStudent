@@ -89,3 +89,61 @@ This document provides a map of the generated code in the M'Student application,
 | `materials.create.repo` | `createMaterial` | `repo` | `src/modules/materials/repo/materials.repo.ts` | - |
 | `materials.update.repo`| `updateMaterial`| `repo` | `src/modules/materials/repo/materials.repo.ts` | - |
 | `materials.delete.repo`| `deleteMaterial`| `repo` | `src/modules/materials/repo/materials.repo.ts` | - |
+
+## assignments
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `assignments.create.service` | `createAssignment` | `service` | `src/modules/assignments/service/assignments.service.ts` | `/api/assignments` |
+| `assignments.list.forStudent` | `getAssignmentsForStudent` | `service` | `src/modules/assignments/service/assignments.service.ts` | `/api/assignments` |
+| `assignments.list.forClass` | `getAssignmentsForClass` | `service` | `src/modules/assignments/service/assignments.service.ts` | `/api/assignments` |
+| `assignments.delete.service` | `deleteAssignment` | `service` | `src/modules/assignments/service/assignments.service.ts` | `/api/assignments/:id` |
+| `assignments.create` | `POST` | `api` | `src/app/api/assignments/route.ts` | `/api/assignments` |
+| `assignments.list` | `GET` | `api` | `src/app/api/assignments/route.ts` | `/api/assignments` |
+| `assignments.delete` | `DELETE` | `api` | `src/app/api/assignments/[id]/route.ts` | `/api/assignments/:id` |
+| `assignments.create.repo` | `createAssignment` | `repo` | `src/modules/assignments/repo/assignments.repo.ts` | - |
+| `assignments.list.forStudent` | `getAssignmentsForStudent` | `repo` | `src/modules/assignments/repo/assignments.repo.ts` | - |
+| `assignments.list.forClass` | `getAssignmentsForClass` | `repo` | `src/modules/assignments/repo/assignments.repo.ts` | - |
+| `assignments.delete.repo` | `deleteAssignment` | `repo` | `src/modules/assignments/repo/assignments.repo.ts` | - |
+
+## submissions-grading
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `submissions.create.service` | `createSubmission` | `service` | `src/modules/submissions-grading/service/submissions.service.ts` | `/api/submissions` |
+| `submissions.list.ungraded` | `getUngradedSubmissions` | `service` | `src/modules/submissions-grading/service/submissions.service.ts` | `/api/submissions` |
+| `submissions.grade.service` | `gradeSubmission` | `service` | `src/modules/submissions-grading/service/submissions.service.ts` | `/api/submissions/:id/grade` |
+| `submissions.create` | `POST` | `api` | `src/app/api/submissions/route.ts` | `/api/submissions` |
+| `submissions.list` | `GET` | `api` | `src/app/api/submissions/route.ts` | `/api/submissions` |
+| `submissions.grade` | `PUT` | `api` | `src/app/api/submissions/[id]/grade/route.ts` | `/api/submissions/:id/grade` |
+| `submissions.create.repo` | `createSubmission` | `repo` | `src/modules/submissions-grading/repo/submissions.repo.ts` | - |
+| `submissions.list.ungraded` | `getUngradedSubmissions` | `repo` | `src/modules/submissions-grading/repo/submissions.repo.ts` | - |
+| `submissions.grade.repo` | `gradeSubmission` | `repo` | `src/modules/submissions-grading/repo/submissions.repo.ts` | - |
+
+## activity
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `activity.log.service` | `logActivity` | `service` | `src/modules/activity/service/activity.service.ts` | `/api/activity` |
+| `activity.list.service` | `getActivity` | `service` | `src/modules/activity/service/activity.service.ts` | `/api/activity` |
+| `activity.prune.service` | `pruneActivity` | `service` | `src/modules/activity/service/activity.service.ts` | `/api/activity` |
+| `activity.log` | `POST` | `api` | `src/app/api/activity/route.ts` | `/api/activity` |
+| `activity.list` | `GET` | `api` | `src/app/api/activity/route.ts` | `/api/activity` |
+| `activity.prune` | `DELETE` | `api` | `src/app/api/activity/route.ts` | `/api/activity` |
+| `activity.log.repo` | `logActivity` | `repo` | `src/modules/activity/repo/activity.repo.ts` | - |
+| `activity.list.repo` | `getActivity` | `repo` | `src/modules/activity/repo/activity.repo.ts` | - |
+| `activity.prune.repo` | `pruneActivity` | `repo` | `src/modules/activity/repo/activity.repo.ts` | - |
+
+## dashboard-teacher
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `dashboard.teacher.aggregate.service` | `getTeacherDashboardData` | `service` | `src/modules/dashboard-teacher/service/dashboard.service.ts` | - |
+| `dashboard.teacher.aggregate.ui` | `TeacherDashboard` | `ui` | `src/modules/dashboard-teacher/ui/teacher-dashboard.tsx` | - |
+
+## student-home
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `student.home.aggregate.service` | `getStudentHomeData` | `service` | `src/modules/student-home/service/student-home.service.ts` | - |
+| `student.home.aggregate.ui` | `StudentHome` | `ui` | `src/modules/student-home/ui/student-home.tsx` | - |

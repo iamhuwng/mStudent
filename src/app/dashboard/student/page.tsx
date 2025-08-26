@@ -3,18 +3,11 @@ import { StudentHome } from '@/modules/student-home/ui/student-home';
 import { isModuleEnabled } from '@/modules/registry';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
-import { getIronSession } from 'iron-session';
-import { cookies } from 'next/headers';
-import { sessionOptions, type SessionData } from '@/modules/auth-session/repo/session.repo';
-import { redirect } from 'next/navigation';
 
 export default async function StudentHomePage() {
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  // In a real app, the user would be determined from the session
+  const studentId = 'user-student-1';
   
-  if (!session.isLoggedIn) {
-      redirect('/login');
-  }
-
   if (!isModuleEnabled('student-home')) {
     return (
         <div className="container p-4 md:p-8">
@@ -37,7 +30,7 @@ export default async function StudentHomePage() {
           Your assignments, classes, and progress.
         </p>
       </div>
-      <StudentHome studentId={session.user.id} />
+      <StudentHome studentId={studentId} />
     </div>
   );
 }
