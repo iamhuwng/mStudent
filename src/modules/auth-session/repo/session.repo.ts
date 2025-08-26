@@ -38,18 +38,6 @@ export async function login(username: string, password: string) {
 
   const userDoc = snapshot.docs[0];
   const userData = userDoc.data();
-
-  // Seed user check
-  if (username === 'admin' && password === 'datHung3384' && userData.email === 'iamhuwng@gmail.com') {
-     const user: Omit<User, 'enrolled'> = {
-        id: userDoc.id,
-        name: userData.name,
-        username: userData.username,
-        email: userData.email,
-        role: userData.role,
-     };
-     return { success: true, user };
-  }
   
   // This is a placeholder for password validation. 
   // In a real application, you should use a library like bcrypt to compare hashed passwords.
