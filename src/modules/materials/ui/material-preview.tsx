@@ -4,7 +4,7 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { Material } from "../service/materials.types";
-import { Check, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
 type MaterialPreviewProps = {
     material: Material;
@@ -31,7 +31,7 @@ export function MaterialPreview({ material }: MaterialPreviewProps) {
                     Submit
                 </Button>
             </CardFooter>
-        </Card>>
+        </Card>
     )
 }
 // <<< END gen:materials.preview

@@ -21,13 +21,18 @@ export const modules: Module[] = [
     enabled: true,
     path: '/login',
   },
-  // Add other modules here. They will be disabled by default.
-  // {
-  //   id: 'classes',
-  //   title: 'Classes',
-  //   enabled: false,
-  //   path: '/classes',
-  // },
+  {
+    id: 'classes',
+    title: 'Classes',
+    enabled: false,
+    path: '/classes',
+  },
+  {
+    id: 'materials',
+    title: 'Materials',
+    enabled: false,
+    path: '/materials',
+  },
 ];
 
 export function isModuleEnabled(id: string): boolean {

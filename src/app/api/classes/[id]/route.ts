@@ -1,7 +1,6 @@
 // @module:classes @layer:api @owner:studio
 import { NextResponse } from 'next/server';
 import { isModuleEnabled } from '@/modules/registry';
-import { getClassById as repoGetClassById } from '@/modules/classes/repo/classes.repo';
 
 // >>> BEGIN gen:classes.detail.api (layer:api)
 export async function GET(
@@ -12,18 +11,8 @@ export async function GET(
     return NextResponse.json({ message: 'Classes module is disabled' }, { status: 403 });
   }
   
-  try {
-    const id = params.id;
-    const cls = await repoGetClassById(id);
-
-    if (!cls) {
-      return NextResponse.json({ message: 'Class not found' }, { status: 404 });
-    }
-    
-    return NextResponse.json(cls);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'An unknown error occurred';
-    return NextResponse.json({ message }, { status: 500 });
-  }
+  // Stub implementation
+  const id = params.id;
+  return NextResponse.json({ id, name: `Class ${id}`, description: 'A stubbed class description' });
 }
 // <<< END gen:classes.detail.api

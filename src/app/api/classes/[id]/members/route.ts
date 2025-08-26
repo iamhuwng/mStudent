@@ -1,10 +1,6 @@
 // @module:classes @layer:api @owner:studio
 import { NextResponse } from 'next/server';
 import { isModuleEnabled } from '@/modules/registry';
-import { 
-    getClassMembers as repoGetClassMembers,
-    assignMemberToClass as repoAssignMemberToClass,
-} from '@/modules/classes/repo/classes.repo';
 
 // >>> BEGIN gen:classes.members.api (layer:api)
 export async function GET(
@@ -15,14 +11,12 @@ export async function GET(
     return NextResponse.json({ message: 'Classes module is disabled' }, { status: 403 });
   }
   
-  try {
-    const classId = params.id;
-    const members = await repoGetClassMembers(classId);
-    return NextResponse.json(members);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'An unknown error occurred';
-    return NextResponse.json({ message }, { status: 500 });
-  }
+  // Stub implementation
+  const classId = params.id;
+  return NextResponse.json([
+    { userId: 'user-teacher-1', classId, role: 'teacher' },
+    { userId: 'user-student-1', classId, role: 'student' }
+  ]);
 }
 // <<< END gen:classes.members.api
 
@@ -35,14 +29,9 @@ export async function POST(
     return NextResponse.json({ message: 'Classes module is disabled' }, { status: 403 });
   }
   
-  try {
-    const classId = params.id;
-    const body = await request.json();
-    const newMember = await repoAssignMemberToClass(classId, body);
-    return NextResponse.json(newMember, { status: 201 });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'An unknown error occurred';
-    return NextResponse.json({ message }, { status: 400 });
-  }
+  // Stub implementation
+  const classId = params.id;
+  const body = await request.json();
+  return NextResponse.json({ classId, ...body }, { status: 201 });
 }
 // <<< END gen:classes.assign.api
