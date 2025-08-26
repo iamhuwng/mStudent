@@ -23,19 +23,24 @@ export type TeacherDashboardData = {
 // >>> BEGIN gen:dashboard.teacher.aggregate (layer:service)
 export async function getTeacherDashboardData(): Promise<TeacherDashboardData> {
     const data: TeacherDashboardData = {};
+    const pagination = { limit: 5 };
 
     if (isModuleEnabled('assignments')) {
         // In a real app, we'd get the teacher's classId from the session
-        data.assignments = await getAssignmentsForClass('class-1'); 
+        const assignmentsResponse = await getAssignmentsForClass('class-1', pagination); 
+        data.assignments = assignmentsResponse.items;
     }
     if (isModuleEnabled('submissions-grading')) {
-        data.submissions = await getUngradedSubmissions();
+        const submissionsResponse = await getUngradedSubmissions({}, pagination);
+        data.submissions = submissionsResponse.items;
     }
     if (isModuleEnabled('materials')) {
-        data.materials = await getMaterials();
+        const materialsResponse = await getMaterials(pagination);
+        data.materials = materialsResponse.data;
     }
     if (isModuleEnabled('activity')) {
-        data.activity = await getActivity({});
+        const activityResponse = await getActivity({}, pagination);
+        data.activity = activityResponse.items;
     }
 
     return data;

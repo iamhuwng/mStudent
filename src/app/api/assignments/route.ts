@@ -33,13 +33,17 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const studentId = searchParams.get('studentId');
   const classId = searchParams.get('classId');
+  const pagination = {
+      limit: Number(searchParams.get('limit')) || 10,
+      cursor: searchParams.get('cursor') || undefined,
+  }
 
   try {
-    let assignments = [];
+    let assignments;
     if (studentId) {
-      assignments = await repoGetAssignmentsForStudent(studentId);
+      assignments = await repoGetAssignmentsForStudent(studentId, pagination);
     } else if (classId) {
-      assignments = await repoGetAssignmentsForClass(classId);
+      assignments = await repoGetAssignmentsForClass(classId, pagination);
     } else {
         return NextResponse.json({ message: 'Missing studentId or classId parameter' }, { status: 400 });
     }

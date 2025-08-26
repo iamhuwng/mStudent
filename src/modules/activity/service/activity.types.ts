@@ -1,5 +1,13 @@
 // @module:activity @layer:service @owner:studio
 
+// >>> BEGIN gen:core.types.pagination (layer:service)
+export type PaginatedResponse<T> = {
+    items: T[];
+    nextCursor: string | null;
+    hasMore: boolean;
+};
+// <<< END gen:core.types.pagination
+
 export type ActivityEvent = {
     id: string;
     actorId: string; // The user who performed the action

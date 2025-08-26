@@ -1,9 +1,9 @@
 // @module:activity @layer:repo @owner:studio
 import 'server-only';
 import { firestore } from '@/lib/firebase/firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 import { isModuleEnabled } from '@/modules/registry';
-import type { ActivityEvent } from '../service/activity.types';
+import type { ActivityEvent, PaginatedResponse } from '../service/activity.types';
 
 const activityCollection = firestore.collection('activity');
 
@@ -21,7 +21,10 @@ export async function logActivity(eventData: Omit<ActivityEvent, 'id' | 'timesta
 // <<< END gen:activity.log
 
 // >>> BEGIN gen:activity.list (layer:repo)
-export async function getActivity(filters: { entityType?: string, entityId?: string }): Promise<ActivityEvent[]> {
+export async function getActivity(
+    filters: { entityType?: string, entityId?: string },
+    pagination: { limit: number, cursor?: string }
+): Promise<PaginatedResponse<ActivityEvent>> {
     let query: FirebaseFirestore.Query = activityCollection;
 
     if (filters.entityType) {
@@ -30,14 +33,21 @@ export async function getActivity(filters: { entityType?: string, entityId?: str
     if (filters.entityId) {
         query = query.where('entityId', '==', filters.entityId);
     }
+    
+    query = query.orderBy('timestamp', 'desc');
 
-    const snapshot = await query.orderBy('timestamp', 'desc').limit(20).get();
-
-    if (snapshot.empty) {
-        return [];
+    if (pagination.cursor) {
+        const cursorTimestamp = Timestamp.fromMillis(parseInt(pagination.cursor));
+        query = query.startAfter(cursorTimestamp);
     }
 
-    return snapshot.docs.map(doc => {
+    const snapshot = await query.limit(pagination.limit + 1).get();
+
+    if (snapshot.empty) {
+        return { items: [], nextCursor: null, hasMore: false };
+    }
+
+    const items = snapshot.docs.map(doc => {
         const data = doc.data();
         return {
             id: doc.id,
@@ -45,6 +55,17 @@ export async function getActivity(filters: { entityType?: string, entityId?: str
             timestamp: data.timestamp.toDate(),
         } as ActivityEvent;
     });
+
+    const hasMore = items.length > pagination.limit;
+    let nextCursor: string | null = null;
+    
+    if (hasMore) {
+        const nextCursorDoc = items.pop(); // remove the extra item
+        const timestamp = (nextCursorDoc!.timestamp as Date).getTime();
+        nextCursor = timestamp.toString();
+    }
+
+    return { items, nextCursor, hasMore };
 }
 // <<< END gen:activity.list
 

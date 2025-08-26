@@ -33,9 +33,13 @@ export async function GET(request: NextRequest) {
     entityType: searchParams.get('entityType') || undefined,
     entityId: searchParams.get('entityId') || undefined,
   };
+  const pagination = {
+      limit: Number(searchParams.get('limit')) || 10,
+      cursor: searchParams.get('cursor') || undefined,
+  }
 
   try {
-    const activity = await repoGetActivity(filters);
+    const activity = await repoGetActivity(filters, pagination);
     return NextResponse.json(activity);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'An unknown error occurred';

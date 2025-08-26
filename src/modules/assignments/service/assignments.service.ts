@@ -3,7 +3,7 @@
 
 import { http } from '@/lib/services/http';
 import { isModuleEnabled } from '@/modules/registry';
-import type { Assignment } from './assignments.types';
+import type { Assignment, PaginatedResponse } from './assignments.types';
 
 const MODULE_ID = 'assignments';
 
@@ -20,22 +20,28 @@ export async function createAssignment(assignmentData: Omit<Assignment, 'id' | '
 // <<< END gen:assignments.create
 
 // >>> BEGIN gen:assignments.list.forStudent (layer:service)
-export async function getAssignmentsForStudent(studentId: string): Promise<Assignment[]> {
+export async function getAssignmentsForStudent(
+    studentId: string,
+    pagination: { limit?: number, cursor?: string }
+): Promise<PaginatedResponse<Assignment>> {
     if (!isModuleEnabled(MODULE_ID)) {
         throw new Error('Assignments module is disabled.');
     }
-    const params = new URLSearchParams({ studentId });
-    return http<Assignment[]>(`/assignments?${params.toString()}`);
+    const params = new URLSearchParams({ studentId, ...pagination } as Record<string, string>);
+    return http<PaginatedResponse<Assignment>>(`/assignments?${params.toString()}`);
 }
 // <<< END gen:assignments.list.forStudent
 
 // >>> BEGIN gen:assignments.list.forClass (layer:service)
-export async function getAssignmentsForClass(classId: string): Promise<Assignment[]> {
+export async function getAssignmentsForClass(
+    classId: string,
+    pagination: { limit?: number, cursor?: string }
+): Promise<PaginatedResponse<Assignment>> {
     if (!isModuleEnabled(MODULE_ID)) {
         throw new Error('Assignments module is disabled.');
     }
-    const params = new URLSearchParams({ classId });
-    return http<Assignment[]>(`/assignments?${params.toString()}`);
+    const params = new URLSearchParams({ classId, ...pagination } as Record<string, string>);
+    return http<PaginatedResponse<Assignment>>(`/assignments?${params.toString()}`);
 }
 // <<< END gen:assignments.list.forClass
 

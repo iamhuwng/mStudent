@@ -20,16 +20,19 @@ export type StudentHomeData = {
 // >>> BEGIN gen:student.home.aggregate (layer:service)
 export async function getStudentHomeData(studentId: string): Promise<StudentHomeData> {
     const data: StudentHomeData = {};
+    const pagination = { limit: 5 };
 
     if (isModuleEnabled('users')) {
         data.user = await getUserById(studentId);
     }
     if (isModuleEnabled('assignments')) {
-        data.assignments = await getAssignmentsForStudent(studentId);
+        const assignmentResponse = await getAssignmentsForStudent(studentId, pagination);
+        data.assignments = assignmentResponse.items;
     }
     if (isModuleEnabled('classes')) {
         // This is a simplification; in a real app, we'd get only the classes the student is in.
-        data.classes = await getClasses();
+        const classResponse = await getClasses(pagination);
+        data.classes = classResponse.data;
     }
     
     return data;

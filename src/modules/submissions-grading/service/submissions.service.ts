@@ -3,7 +3,7 @@
 
 import { http } from '@/lib/services/http';
 import { isModuleEnabled } from '@/modules/registry';
-import type { Submission, Grade } from './submissions.types';
+import type { Submission, Grade, PaginatedResponse } from './submissions.types';
 
 const MODULE_ID = 'submissions-grading';
 
@@ -20,15 +20,20 @@ export async function createSubmission(submissionData: Omit<Submission, 'id' | '
 // <<< END gen:submissions.create
 
 // >>> BEGIN gen:submissions.list.ungraded (layer:service)
-export async function getUngradedSubmissions(classId?: string): Promise<Submission[]> {
+export async function getUngradedSubmissions(
+    filters: { classId?: string },
+    pagination: { limit?: number, cursor?: string }
+): Promise<PaginatedResponse<Submission>> {
     if (!isModuleEnabled(MODULE_ID)) {
         throw new Error('Submissions module is disabled.');
     }
-    const params = new URLSearchParams();
-    if (classId) params.append('classId', classId);
-    params.append('status', 'ungraded');
+    const params = new URLSearchParams({
+        status: 'ungraded',
+        ...filters,
+        ...pagination
+    } as Record<string, string>);
     
-    return http<Submission[]>(`/submissions?${params.toString()}`);
+    return http<PaginatedResponse<Submission>>(`/submissions?${params.toString()}`);
 }
 // <<< END gen:submissions.list.ungraded
 

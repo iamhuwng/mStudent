@@ -1,8 +1,8 @@
 // @module:submissions-grading @layer:repo @owner:studio
 import 'server-only';
 import { firestore } from '@/lib/firebase/firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
-import type { Submission, Grade } from '../service/submissions.types';
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
+import type { Submission, Grade, PaginatedResponse } from '../service/submissions.types';
 
 const submissionsCollection = firestore.collection('submissions');
 
@@ -24,17 +24,25 @@ export async function createSubmission(submissionData: Omit<Submission, 'id' | '
 // <<< END gen:submissions.create
 
 // >>> BEGIN gen:submissions.list.ungraded (layer:repo)
-export async function getUngradedSubmissions(classId?: string): Promise<Submission[]> {
+export async function getUngradedSubmissions(
+    filters: { classId?: string },
+    pagination: { limit: number, cursor?: string }
+): Promise<PaginatedResponse<Submission>> {
     // This is a simplification. A real implementation would need to join across assignments to filter by class.
     // For now, we will fetch all ungraded submissions.
     let query = submissionsCollection.where('grade', '==', null).orderBy('submittedAt', 'desc');
 
-    const snapshot = await query.get();
+    if (pagination.cursor) {
+        const cursorTimestamp = Timestamp.fromMillis(parseInt(pagination.cursor));
+        query = query.startAfter(cursorTimestamp);
+    }
+    
+    const snapshot = await query.limit(pagination.limit + 1).get();
     if (snapshot.empty) {
-        return [];
+        return { items: [], nextCursor: null, hasMore: false };
     }
 
-    return snapshot.docs.map(doc => {
+    const items = snapshot.docs.map(doc => {
         const data = doc.data();
         return {
             id: doc.id,
@@ -42,6 +50,17 @@ export async function getUngradedSubmissions(classId?: string): Promise<Submissi
             submittedAt: data.submittedAt.toDate(),
         } as Submission;
     });
+
+    const hasMore = items.length > pagination.limit;
+    let nextCursor: string | null = null;
+
+    if (hasMore) {
+        const nextCursorDoc = items.pop();
+        const timestamp = (nextCursorDoc!.submittedAt as Date).getTime();
+        nextCursor = timestamp.toString();
+    }
+    
+    return { items, nextCursor, hasMore };
 }
 // <<< END gen:submissions.list.ungraded
 

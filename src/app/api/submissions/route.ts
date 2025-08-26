@@ -32,11 +32,15 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const status = searchParams.get('status');
   const classId = searchParams.get('classId');
+  const pagination = {
+      limit: Number(searchParams.get('limit')) || 10,
+      cursor: searchParams.get('cursor') || undefined,
+  }
 
   try {
-    let submissions = [];
+    let submissions;
     if (status === 'ungraded') {
-        submissions = await repoGetUngradedSubmissions(classId || undefined);
+        submissions = await repoGetUngradedSubmissions({classId: classId || undefined}, pagination);
     } else {
         // Extend with other statuses like 'graded', 'forStudent', etc. in the future
         return NextResponse.json({ message: 'Invalid or missing status parameter' }, { status: 400 });
