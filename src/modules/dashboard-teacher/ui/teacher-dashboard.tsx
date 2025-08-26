@@ -11,20 +11,29 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { computeDeadlines } from '@/modules/deadlines-notifications/service/deadlines.service';
+import { Badge } from '@/components/ui/badge';
 
 // >>> BEGIN gen:dashboard.teacher.aggregate (layer:ui)
 export function TeacherDashboard() {
   const [data, setData] = useState<TeacherDashboardData | null>(null);
+  const [deadlines, setDeadlines] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+
+  const deadlinesEnabled = isModuleEnabled('deadlines-notifications');
 
   useEffect(() => {
     async function fetchData() {
       try {
         setIsLoading(true);
-        const dashboardData = await getTeacherDashboardData();
+        const [dashboardData, deadlinesData] = await Promise.all([
+            getTeacherDashboardData(),
+            deadlinesEnabled ? computeDeadlines() : Promise.resolve(null)
+        ]);
         setData(dashboardData);
+        setDeadlines(deadlinesData);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'An unknown error occurred.';
         setError(message);
@@ -38,7 +47,7 @@ export function TeacherDashboard() {
       }
     }
     fetchData();
-  }, [toast]);
+  }, [toast, deadlinesEnabled]);
 
   if (isLoading) {
     return (
@@ -86,7 +95,9 @@ export function TeacherDashboard() {
           </CardHeader>
           <CardContent>
             <p>Showing {data.assignments.length} assignments.</p>
-            {/* A real UI would list them here */}
+            {deadlinesEnabled && deadlines?.overdue?.length > 0 && (
+                <p><Badge variant="destructive">{deadlines.overdue.length} overdue</Badge></p>
+            )}
           </CardContent>
         </Card>
       )}
@@ -98,7 +109,6 @@ export function TeacherDashboard() {
           </CardHeader>
           <CardContent>
             <p>{data.submissions.length} submissions need grading.</p>
-            {/* A real UI would list them here */}
           </CardContent>
         </Card>
       )}
@@ -124,7 +134,6 @@ export function TeacherDashboard() {
           </CardHeader>
           <CardContent>
             <p>{data.activity.length} recent events.</p>
-            {/* A real UI would list them here */}
           </CardContent>
         </Card>
       )}

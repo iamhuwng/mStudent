@@ -869,5 +869,45 @@
     "module": "flashcards",
     "routes": [],
     "callers": ["src/app/api/flashcards/[entity]/route.ts"]
+  },
+  "deadlines.compute.service": {
+    "file": "src/modules/deadlines-notifications/service/deadlines.service.ts",
+    "export": "computeDeadlines",
+    "layer": "service",
+    "module": "deadlines-notifications",
+    "routes": ["/api/notifications/compute"],
+    "callers": ["src/modules/dashboard-teacher/ui/teacher-dashboard.tsx", "src/modules/student-home/ui/student-home.tsx"]
+  },
+  "deadlines.notify.service": {
+    "file": "src/modules/deadlines-notifications/service/deadlines.service.ts",
+    "export": "notifyUser",
+    "layer": "service",
+    "module": "deadlines-notifications",
+    "routes": ["/api/notifications/notify"],
+    "callers": []
+  },
+  "deadlines.api": {
+    "file": "src/app/api/notifications/[action]/route.ts",
+    "export": "GET, POST",
+    "layer": "api",
+    "module": "deadlines-notifications",
+    "routes": ["/api/notifications/compute", "/api/notifications/notify"],
+    "callers": ["src/modules/deadlines-notifications/service/deadlines.service.ts"]
+  },
+  "deadlines.compute.repo": {
+    "file": "src/modules/deadlines-notifications/repo/deadlines.repo.ts",
+    "export": "computeDeadlines",
+    "layer": "repo",
+    "module": "deadlines-notifications",
+    "routes": [],
+    "callers": ["src/app/api/notifications/[action]/route.ts"]
+  },
+  "deadlines.notify.repo": {
+    "file": "src/modules/deadlines-notifications/repo/deadlines.repo.ts",
+    "export": "notifyUser",
+    "layer": "repo",
+    "module": "deadlines-notifications",
+    "routes": [],
+    "callers": ["src/app/api/notifications/[action]/route.ts"]
   }
 }

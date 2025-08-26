@@ -165,3 +165,13 @@ This document provides a map of the generated code in the M'Student application,
 | `flashcards.set.create` | `createFlashcardSet` | `repo` | `src/modules/flashcards/repo/flashcards.repo.ts` | - |
 | `flashcards.card.create` | `createFlashcard` | `repo` | `src/modules/flashcards/repo/flashcards.repo.ts` | - |
 | `flashcards.progress.mark` | `markFlashcardProgress` | `repo` | `src/modules/flashcards/repo/flashcards.repo.ts` | - |
+
+## deadlines-notifications
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `deadlines.compute.service` | `computeDeadlines` | `service` | `src/modules/deadlines-notifications/service/deadlines.service.ts` | `/api/notifications/compute` |
+| `deadlines.notify.service` | `notifyUser` | `service` | `src/modules/deadlines-notifications/service/deadlines.service.ts` | `/api/notifications/notify` |
+| `deadlines.api` | `GET`, `POST` | `api` | `src/app/api/notifications/[action]/route.ts` | `/api/notifications/*` |
+| `deadlines.compute.repo` | `computeDeadlines` | `repo` | `src/modules/deadlines-notifications/repo/deadlines.repo.ts` | - |
+| `deadlines.notify.repo` | `notifyUser` | `repo` | `src/modules/deadlines-notifications/repo/deadlines.repo.ts` | - |

@@ -9,20 +9,29 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
+import { computeDeadlines } from '@/modules/deadlines-notifications/service/deadlines.service';
+import { Badge } from '@/components/ui/badge';
 
 // >>> BEGIN gen:student.home.aggregate (layer:ui)
 export function StudentHome({ studentId }: { studentId: string }) {
   const [data, setData] = useState<StudentHomeData | null>(null);
+  const [deadlines, setDeadlines] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+
+  const deadlinesEnabled = isModuleEnabled('deadlines-notifications');
 
   useEffect(() => {
     async function fetchData() {
       try {
         setIsLoading(true);
-        const studentData = await getStudentHomeData(studentId);
+        const [studentData, deadlinesData] = await Promise.all([
+          getStudentHomeData(studentId),
+          deadlinesEnabled ? computeDeadlines() : Promise.resolve(null)
+        ]);
         setData(studentData);
+        setDeadlines(deadlinesData);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'An unknown error occurred.';
         setError(message);
@@ -36,7 +45,7 @@ export function StudentHome({ studentId }: { studentId: string }) {
       }
     }
     fetchData();
-  }, [studentId, toast]);
+  }, [studentId, toast, deadlinesEnabled]);
 
   if (isLoading) {
     return (
@@ -88,7 +97,12 @@ export function StudentHome({ studentId }: { studentId: string }) {
             <CardTitle>My Assignments</CardTitle>
             <CardDescription>All your assigned work.</CardDescription>
           </CardHeader>
-          <CardContent><p>You have {data.assignments.length} assignments.</p></CardContent>
+          <CardContent>
+            <p>You have {data.assignments.length} assignments.</p>
+            {deadlinesEnabled && deadlines?.upcoming?.length > 0 && (
+                <p><Badge>{deadlines.upcoming.length} due soon</Badge></p>
+            )}
+          </CardContent>
         </Card>
       )}
       {isModuleEnabled('classes') && data?.classes && data.classes.length > 0 && (
@@ -96,7 +110,7 @@ export function StudentHome({ studentId }: { studentId: string }) {
           <CardHeader>
             <CardTitle>My Classes</CardTitle>
             <CardDescription>Classes you're enrolled in.</CardDescription>
-          </CardHeader>
+          </Header>
           <CardContent><p>You are in {data.classes.length} classes.</p></CardContent>
         </Card>
       )}
