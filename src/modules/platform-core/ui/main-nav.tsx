@@ -65,15 +65,13 @@ function MobileNav() {
         <SidebarMenu>
           {enabledModules.map((mod) => (
             <SidebarMenuItem key={mod.id}>
-              <Link href={mod.path} passHref legacyBehavior>
-                <SidebarMenuButton
-                  as="a"
-                  isActive={pathname?.startsWith(mod.path)}
-                  icon={moduleIcons[mod.id]}
-                >
-                  {mod.title}
-                </SidebarMenuButton>
-              </Link>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname?.startsWith(mod.path)}
+                icon={moduleIcons[mod.id]}
+              >
+                <Link href={mod.path}>{mod.title}</Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
