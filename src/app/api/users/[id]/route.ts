@@ -6,6 +6,8 @@ import {
     deleteUser as repoDeleteUser
 } from '@/modules/users/repo/users.repo';
 import { isModuleEnabled } from '@/modules/registry';
+import { z } from 'zod';
+import { userSchema } from '@/modules/users/service/users.types';
 
 // >>> BEGIN gen:users.api.detail (layer:api)
 export async function GET(
@@ -44,14 +46,21 @@ export async function PUT(
     try {
         const id = params.id;
         const body = await request.json();
-        const updatedUser = await repoUpdateUser(id, body);
+        const userData = userSchema.partial().parse(body);
+        const updatedUser = await repoUpdateUser(id, userData);
         return NextResponse.json(updatedUser);
     } catch (error) {
-        const message = error instanceof Error ? error.message : 'An unknown error occurred';
-        if (message === 'User not found') {
-            return NextResponse.json({ message }, { status: 404 });
-        }
-        return NextResponse.json({ message }, { status: 500 });
+        const message = error instanceof z.ZodError 
+            ? error.errors.map(e => e.message).join(', ')
+            : error instanceof Error && error.message === 'User not found'
+            ? 'User not found'
+            : error instanceof Error
+            ? error.message
+            : 'An unknown error occurred';
+        
+        const status = error instanceof Error && error.message === 'User not found' ? 404 : 400;
+
+        return NextResponse.json({ message }, { status });
     }
 }
 // <<< END gen:users.api.update

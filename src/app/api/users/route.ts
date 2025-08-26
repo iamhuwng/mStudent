@@ -5,6 +5,8 @@ import {
     createUser as repoCreateUser
 } from '@/modules/users/repo/users.repo';
 import { isModuleEnabled } from '@/modules/registry';
+import { z } from 'zod';
+import { userSchema } from '@/modules/users/service/users.types';
 
 // >>> BEGIN gen:users.api.list (layer:api)
 export async function GET() {
@@ -30,10 +32,15 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json();
-        const newUser = await repoCreateUser(body);
+        const userData = userSchema.omit({ id: true, enrolled: true }).parse(body);
+        const newUser = await repoCreateUser(userData);
         return NextResponse.json(newUser, { status: 201 });
     } catch (error) {
-        const message = error instanceof Error ? error.message : 'An unknown error occurred';
+        const message = error instanceof z.ZodError 
+            ? error.errors.map(e => e.message).join(', ')
+            : error instanceof Error 
+            ? error.message 
+            : 'An unknown error occurred';
         return NextResponse.json({ message }, { status: 400 });
     }
 }
