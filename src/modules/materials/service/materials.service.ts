@@ -4,15 +4,17 @@
 import { http } from '@/lib/services/http';
 import { isModuleEnabled } from '@/modules/registry';
 import type { Material } from './materials.types';
+import { Page } from '@/lib/types/pagination';
 
 const MODULE_ID = 'materials';
 
 // >>> BEGIN gen:materials.list.service (layer:service)
-export async function getMaterials(): Promise<Material[]> {
+export async function getMaterials(pagination: { page?: number, limit?: number }): Promise<Page<Material>> {
   if (!isModuleEnabled(MODULE_ID)) {
     throw new Error('Materials module is disabled.');
   }
-  return http<Material[]>('/materials');
+  const params = new URLSearchParams(pagination as Record<string, string>);
+  return http<Page<Material>>(`/materials?${params.toString()}`);
 }
 // <<< END gen:materials.list.service
 

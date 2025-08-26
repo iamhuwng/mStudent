@@ -2,6 +2,7 @@
 
 // >>> BEGIN gen:core.types.pagination (layer:service)
 export type Page<T> = {
+  data: T[];
   items: T[];
   nextCursor?: string | null;
   hasMore: boolean;

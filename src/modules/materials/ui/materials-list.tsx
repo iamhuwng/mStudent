@@ -29,7 +29,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Page } from '@/lib/types/pagination';
 
 // >>> BEGIN gen:materials.list (layer:ui)
 export function MaterialsList() {
@@ -40,8 +41,8 @@ export function MaterialsList() {
   const fetchMaterials = async () => {
       try {
         setIsLoading(true);
-        const fetchedMaterials = await getMaterials();
-        setMaterials(fetchedMaterials);
+        const fetchedMaterialsPage: Page<Material> = await getMaterials({ page: 1, limit: 10 });
+        setMaterials(fetchedMaterialsPage.data || []);
       } catch (error) {
         toast({
           variant: 'destructive',
