@@ -1,3 +1,4 @@
+// @module:platform-core @layer:ui @owner:studio
 "use client"
 
 import * as React from "react"

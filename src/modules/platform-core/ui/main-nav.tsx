@@ -12,7 +12,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
 import { GraduationCap, Users, BookOpen, FileText, ClipboardCheck, History } from 'lucide-react';
@@ -29,7 +28,7 @@ const moduleIcons: { [key: string]: React.ReactElement } = {
 // >>> BEGIN gen:core.nav (layer:ui)
 function DesktopNav() {
     const pathname = usePathname();
-    const enabledModules = modules.filter((m) => m.enabled && m.id !== 'auth-session');
+    const enabledModules = modules.filter((m) => m.enabled && m.id !== 'auth-session' && !m.path.includes('dashboard'));
 
     return (
         <>
@@ -72,6 +71,7 @@ function MobileNav() {
             <SidebarMenuItem key={mod.id}>
               <Link href={mod.path} passHref legacyBehavior>
                 <SidebarMenuButton
+                  as="a"
                   isActive={pathname?.startsWith(mod.path)}
                   icon={moduleIcons[mod.id]}
                 >
