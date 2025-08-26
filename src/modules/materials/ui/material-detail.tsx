@@ -6,7 +6,7 @@ import { MaterialPreview } from './material-preview';
 import type { Material } from '../service/materials.types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { PenSquare, Send } from 'lucide-react';
+import { PenSquare } from 'lucide-react';
 import { isModuleEnabled } from '@/modules/registry';
 import { BulkAssignDialog } from '@/modules/assignments/ui/bulk-assign-dialog';
 
