@@ -20,3 +20,5 @@ References:
 ## Update (2025-08-26)
 - Shipped: <task short name>
 - Notes: <1–2 bullets>
+
+- 2025-08-26 — Correction: removed erroneous "Materials editor MVP" snapshot/tag.
