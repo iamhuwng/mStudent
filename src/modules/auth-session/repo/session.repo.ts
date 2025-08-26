@@ -20,23 +20,9 @@ export interface SessionData {
  */
 export async function login(username: string, password: string): Promise<{ success: true, user: Omit<User, 'enrolled' | 'password'> }> {
   const usersRef = firestore.collection('users');
-  const snapshot = await usersRef.where('username', '==', username.toLowerCase()).limit(1).get();
+  const snapshot = await usersRef.where('username', '==', username.toLowerCase().trim()).limit(1).get();
 
   if (snapshot.empty) {
-    // This is a temporary fallback for the initial admin user.
-    // In a real application, all users should be in the database.
-    if (username.toLowerCase() === 'admin' && password === 'datHung3384') {
-        return {
-            success: true,
-            user: {
-                id: 'user-admin',
-                username: 'admin',
-                email: 'iamhuwng@gmail.com',
-                name: 'Admin User',
-                role: 'admin',
-            },
-        };
-    }
     throw new Error('Invalid username or password');
   }
 

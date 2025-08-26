@@ -8,7 +8,7 @@ export interface SessionData {
 }
 
 export const sessionOptions: IronSessionOptions = {
-  password: process.env.SECRET_COOKIE_PASSWORD as string,
+  password: (process.env.SECRET_COOKIE_PASSWORD as string)?.trim(),
   cookieName: 'mstudent-session',
   cookieOptions: {
     httpOnly: true,
