@@ -5,10 +5,21 @@ import { logApiRequest, logApiResponse } from '@/lib/logging';
 import { getMaterials as repoGetMaterials, createMaterial as repoCreateMaterial } from '@/modules/materials/repo/materials.repo';
 import { z } from 'zod';
 import { materialSchema } from '@/modules/materials/service/materials.types';
+import { getIronSession } from 'iron-session';
+import { sessionOptions, SessionData } from '@/modules/auth-session/session';
+import { cookies } from 'next/headers';
 
 // >>> BEGIN gen:materials.api.list (layer:api)
 export async function GET(request: NextRequest) {
   const { requestId, startTime } = logApiRequest(request);
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+
+  if (!session.isLoggedIn || !['admin', 'teacher'].includes(session.user.role)) {
+    const response = { ok: false, error: 'Forbidden', rid: requestId };
+    logApiResponse(requestId, startTime, request, { status: 403, body: response });
+    return NextResponse.json(response, { status: 403 });
+  }
+
   if (!isModuleEnabled('materials')) {
     const response = { ok: false, error: 'Materials module is disabled', rid: requestId };
     logApiResponse(requestId, startTime, request, { status: 403, body: response });
@@ -36,6 +47,14 @@ export async function GET(request: NextRequest) {
 // >>> BEGIN gen:materials.api.create (layer:api)
 export async function POST(request: Request) {
     const { requestId, startTime } = logApiRequest(request);
+    const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+
+    if (!session.isLoggedIn || !['admin', 'teacher'].includes(session.user.role)) {
+        const response = { ok: false, error: 'Forbidden', rid: requestId };
+        logApiResponse(requestId, startTime, request, { status: 403, body: response });
+        return NextResponse.json(response, { status: 403 });
+    }
+
     if (!isModuleEnabled('materials')) {
         const response = { ok: false, error: 'Materials module is disabled', rid: requestId };
         logApiResponse(requestId, startTime, request, { status: 403, body: response });
