@@ -22,3 +22,11 @@ References:
 - Notes: <1–2 bullets>
 
 - 2025-08-26 — Correction: removed erroneous "Materials editor MVP" snapshot/tag.
+
+## Delta since v0.4.1 — 2025-08-26
+- Files changed: 0
+- Modules touched: 
+- Key areas: 0 files (see git log for details)
+
+### Commits since v0.4.1
+
