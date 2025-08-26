@@ -16,6 +16,36 @@ export const modules: Module[] = [
     path: '/users',
   },
   {
+    id: 'classes',
+    title: 'Classes',
+    enabled: true,
+    path: '/classes',
+  },
+  {
+    id: 'materials',
+    title: 'Materials',
+    enabled: true,
+    path: '/materials',
+  },
+  {
+    id: 'assignments',
+    title: 'Assignments',
+    enabled: false,
+    path: '/assignments',
+  },
+    {
+    id: 'submissions-grading',
+    title: 'Submissions',
+    enabled: false,
+    path: '/submissions',
+  },
+    {
+    id: 'activity',
+    title: 'Activity',
+    enabled: false,
+    path: '/activity',
+  },
+  {
     id: 'auth-session',
     title: 'Login',
     enabled: true,
