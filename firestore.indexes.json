@@ -10,6 +10,14 @@
       ]
     },
     {
+      "collectionGroup": "assignments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "assignedToId", "order": "ASCENDING" },
+        { "fieldPath": "deadline", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "submissions",
       "queryScope": "COLLECTION",
       "fields": [

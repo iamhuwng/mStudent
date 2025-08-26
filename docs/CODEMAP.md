@@ -11,6 +11,7 @@ This document provides a map of the generated code in the M'Student application,
 | `core.middleware.guard` | `middleware` | `api` | `src/middleware.ts` | `* (excluded)` |
 | `core.http.fetch` | `http` | `service` | `src/lib/services/http.ts` | - |
 | `core.registry.read` | `modules`, `isModuleEnabled` | `service` | `src/modules/registry.ts` | - |
+| `core.logging` | `logApiRequest` | `api` | `src/lib/logging.ts` | - |
 | `rules.users` | - | `repo` | `firestore.rules` | - |
 | `rules.classes` | - | `repo` | `firestore.rules` | - |
 | `rules.materials` | - | `repo` | `firestore.rules` | - |

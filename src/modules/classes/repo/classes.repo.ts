@@ -9,9 +9,12 @@ const classesCollection = firestore.collection('classes');
 const classMembersCollection = firestore.collection('classMembers');
 
 // >>> BEGIN gen:classes.list.repo (layer:repo)
-export async function getClasses(): Promise<Class[]> {
+export async function getClasses(pagination: { page: number; limit: number }): Promise<Class[]> {
   console.log('Repo: Fetching all classes from Firestore');
-  const snapshot = await classesCollection.get();
+  const { page, limit } = pagination;
+  const offset = (page - 1) * limit;
+
+  const snapshot = await classesCollection.limit(limit).offset(offset).get();
   if (snapshot.empty) {
     return [];
   }

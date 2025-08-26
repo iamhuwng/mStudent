@@ -6,9 +6,12 @@ import type { Material } from '../service/materials.types';
 const materialsCollection = firestore.collection('materials');
 
 // >>> BEGIN gen:materials.list.repo (layer:repo)
-export async function getMaterials(): Promise<Material[]> {
+export async function getMaterials(pagination: { page: number, limit: number }): Promise<Material[]> {
   console.log('Repo: Fetching all materials from Firestore');
-  const snapshot = await materialsCollection.get();
+  const { page, limit } = pagination;
+  const offset = (page - 1) * limit;
+
+  const snapshot = await materialsCollection.limit(limit).offset(offset).get();
   if (snapshot.empty) {
     return [];
   }

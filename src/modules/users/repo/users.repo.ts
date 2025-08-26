@@ -4,9 +4,12 @@ import type { User } from '../service/users.types';
 import { firestore } from '@/lib/firebase/firebase-admin';
 
 // >>> BEGIN gen:users.list.repo (layer:repo)
-export async function getUsers(): Promise<User[]> {
+export async function getUsers(pagination: { page: number; limit: number }): Promise<User[]> {
   console.log('Repo: Fetching users from Firestore');
-  const snapshot = await firestore.collection('users').get();
+  const { page, limit } = pagination;
+  const offset = (page - 1) * limit;
+
+  const snapshot = await firestore.collection('users').limit(limit).offset(offset).get();
   if (snapshot.empty) {
     return [];
   }

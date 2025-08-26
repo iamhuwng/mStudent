@@ -1,4 +1,15 @@
 // @module:materials @layer:service @owner:studio
+import { z } from 'zod';
+
+export const materialSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  format: z.enum(['quiz', 'video', 'document', 'slide']),
+  tags: z.array(z.string()),
+  timeLimit: z.number().optional(),
+  content: z.string(),
+});
+
 
 export type MaterialFormat = 'quiz' | 'video' | 'document' | 'slide';
 
