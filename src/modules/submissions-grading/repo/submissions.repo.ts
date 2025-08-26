@@ -8,10 +8,11 @@ import type { Page } from '@/lib/types/pagination';
 const submissionsCollection = firestore.collection('submissions');
 
 // >>> BEGIN gen:submissions.create (layer:repo)
-export async function createSubmission(submissionData: Omit<Submission, 'id' | 'submittedAt' | 'grade'>): Promise<Submission> {
+export async function createSubmission(submissionData: Omit<Submission, 'id' | 'submittedAt' | 'grade' | 'status'>): Promise<Submission> {
     const newSubmissionRef = await submissionsCollection.add({
         ...submissionData,
         submittedAt: FieldValue.serverTimestamp(),
+        status: 'ungraded',
         grade: null,
     });
     const snapshot = await newSubmissionRef.get();
@@ -26,12 +27,12 @@ export async function createSubmission(submissionData: Omit<Submission, 'id' | '
 
 // >>> BEGIN gen:submissions.list.ungraded (layer:repo)
 export async function getUngradedSubmissions(
-    filters: { classId?: string },
+    filters: { classId?: string; teacherId?: string },
     pagination: { limit: number, cursor?: string }
 ): Promise<Page<Submission>> {
-    // This is a simplification. A real implementation would need to join across assignments to filter by class.
+    // This is a simplification. A real implementation would need to join across assignments to filter by class/teacher.
     // For now, we will fetch all ungraded submissions.
-    let query = submissionsCollection.where('grade', '==', null).orderBy('submittedAt', 'desc');
+    let query = submissionsCollection.where('status', '==', 'ungraded').orderBy('submittedAt', 'desc');
 
     if (pagination.cursor) {
         const cursorTimestamp = Timestamp.fromMillis(parseInt(pagination.cursor));
@@ -78,7 +79,10 @@ export async function gradeSubmission(submissionId: string, gradeData: Omit<Grad
         gradedAt: new Date(),
     };
     
-    await docRef.update({ grade });
+    await docRef.update({ 
+        grade,
+        status: 'graded'
+     });
     
     const updatedDoc = await docRef.get();
     const data = updatedDoc.data()!;

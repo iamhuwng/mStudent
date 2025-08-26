@@ -6,19 +6,29 @@ import type { Page as CorePage } from '@/lib/types/pagination';
 export type PaginatedResponse<T> = CorePage<T>;
 // <<< END gen:core.types.pagination
 
+export type PerQuestionGrade = {
+    questionId: string;
+    isCorrect: boolean;
+    studentAnswer: any;
+    correctAnswer: any;
+    feedback?: string;
+};
+
 export type Grade = {
     score: number;
     total: number;
     comment: string;
     gradedBy: string; // userId of teacher
     gradedAt: Date;
-}
+    details?: PerQuestionGrade[]; // Detailed breakdown
+};
 
 export type Submission = {
     id: string;
     assignmentId: string;
     studentId: string;
     submittedAt: Date;
-    content: string; // For now, a stub. Could be JSON, a file path, etc.
+    content: Record<string, any>; // Student's answers { questionId: answer }
+    status: 'graded' | 'ungraded';
     grade?: Grade;
 };
