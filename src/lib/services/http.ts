@@ -30,7 +30,10 @@ async function http<T>(path: string, options?: HttpOptions): Promise<T> {
     } catch (e) {
       errorData = { message: `Request failed with status ${response.status}: ${response.statusText}` };
     }
-    throw new Error(errorData.message || 'An unknown error occurred');
+    // Include reqId in the error message if available
+    const message = errorData.message || 'An unknown error occurred';
+    const reqId = errorData.reqId ? ` (Request ID: ${errorData.reqId})` : '';
+    throw new Error(`${message}${reqId}`);
   }
 
   // Handle cases with no content
