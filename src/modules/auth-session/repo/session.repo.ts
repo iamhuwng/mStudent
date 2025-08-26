@@ -3,7 +3,6 @@ import 'server-only';
 import type { User } from '@/modules/users/service/users.types';
 import { IronSessionOptions } from 'iron-session';
 import { firestore } from '@/lib/firebase/firebase-admin';
-import bcrypt from 'bcryptjs';
 
 // >>> BEGIN gen:auth.claims.ensure (layer:repo)
 export interface SessionData {
@@ -23,29 +22,29 @@ export const sessionOptions: IronSessionOptions = {
 // >>> BEGIN gen:auth.login.repo (layer:repo)
 /**
  * Validates user credentials against Firestore.
- * @param email - The user's email.
+ * @param username - The user's username.
  * @param password - The user's password.
  * @returns A promise that resolves with the user object or rejects with an error.
  */
-export async function login(email: string, password: string) {
-  console.log(`Repo: Attempting login for ${email}`);
+export async function login(username: string, password: string) {
+  console.log(`Repo: Attempting login for ${username}`);
   
   const usersCollection = firestore.collection('users');
-  const snapshot = await usersCollection.where('email', '==', email).limit(1).get();
+  const snapshot = await usersCollection.where('username', '==', username).limit(1).get();
 
   if (snapshot.empty) {
-    throw new Error('Invalid email or password');
+    throw new Error('Invalid username or password');
   }
 
   const userDoc = snapshot.docs[0];
   const userData = userDoc.data();
 
-  // In a real app, you would hash passwords.
-  // For this example, we'll assume plain text password stored or a seed user.
-  if (email === 'iamhuwng@gmail.com' && password === 'datHung3384') {
+  // Seed user check
+  if (username === 'admin' && password === 'datHung3384' && userData.email === 'iamhuwng@gmail.com') {
      const user: Omit<User, 'enrolled'> = {
         id: userDoc.id,
         name: userData.name,
+        username: userData.username,
         email: userData.email,
         role: userData.role,
      };
@@ -58,6 +57,7 @@ export async function login(email: string, password: string) {
     const user: Omit<User, 'enrolled'> = {
         id: userDoc.id,
         name: userData.name,
+        username: userData.username,
         email: userData.email,
         role: userData.role,
     };
@@ -65,6 +65,6 @@ export async function login(email: string, password: string) {
   }
 
 
-  throw new Error('Invalid email or password');
+  throw new Error('Invalid username or password');
 }
 // <<< END gen:auth.login.repo

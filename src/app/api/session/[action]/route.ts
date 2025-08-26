@@ -15,8 +15,8 @@ export async function POST(
 
   if (action === 'login') {
     try {
-      const { email, password } = await req.json();
-      const { user } = await repoLogin(email, password);
+      const { username, password } = await req.json();
+      const { user } = await repoLogin(username, password);
       
       session.isLoggedIn = true;
       session.user = user;
