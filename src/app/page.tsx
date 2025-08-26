@@ -1,7 +1,7 @@
 // @module:platform-core @layer:ui @owner:studio
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { GraduationCap, Users, BookOpen } from "lucide-react";
+import { GraduationCap, Users, BookOpen, Rocket } from "lucide-react";
 import Link from "next/link";
 
 // >>> BEGIN gen:core.home (layer:ui)
@@ -20,10 +20,13 @@ export default function Home() {
             </p>
             <div className="space-x-4">
               <Button asChild>
-                <Link href="/login">Get Started</Link>
+                <Link href="/login">Login</Link>
               </Button>
               <Button variant="secondary" asChild>
-                <Link href="/users">View Users</Link>
+                <Link href="/getting-started">
+                  <Rocket className="mr-2"/>
+                  Get Started
+                </Link>
               </Button>
             </div>
           </div>
@@ -55,7 +58,7 @@ export default function Home() {
                   A dedicated module for viewing and managing student and staff profiles.
                 </p>
               </CardContent>
-            </Card>
+            </card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium font-body">Layered Architecture</CardTitle>
