@@ -6,9 +6,9 @@ import { Terminal, KeyRound, Database, Wand2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function GettingStartedPage() {
-  const envFileContent = `# Firebase Service Account
-FIREBASE_PROJECT_ID="your-firebase-project-id"
-FIREBASE_CLIENT_EMAIL="firebase-adminsdk-...@your-project.iam.gserviceaccount.com"
+  const envFileContent = `# Firebase Service Account for project 'mstudent-9bs9s'
+FIREBASE_PROJECT_ID="mstudent-9bs9s"
+FIREBASE_CLIENT_EMAIL="firebase-adminsdk-...@mstudent-9bs9s.iam.gserviceaccount.com"
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n"
 
 # Iron Session (for encrypting cookies)
@@ -22,9 +22,10 @@ GEMINI_API_KEY="your-gemini-api-key"
   return (
     <div className="container p-4 md:p-8">
       <div className="space-y-2 mb-8 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold font-headline">Getting Started</h1>
+        <h1 className="text-3xl font-bold font-headline">Setup Your Environment</h1>
         <p className="text-muted-foreground">
-          Follow these steps to configure your local development environment and connect to Firebase and Google AI.
+          I have created a Firebase project for you named <code className='font-mono bg-muted p-1 rounded-md'>mstudent-9bs9s</code>.
+          Follow these steps to connect your local environment to it.
         </p>
       </div>
 
@@ -50,17 +51,17 @@ GEMINI_API_KEY="your-gemini-api-key"
 
       <Card className="max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle>Step 2: Get Firebase Credentials</CardTitle>
+          <CardTitle>Step 2: Get Firebase Server Credentials</CardTitle>
           <CardDescription>
-            Your application uses Firebase for data storage and authentication.
+            Your app's backend needs administrator access to your Firebase project.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
             <div className="flex items-start gap-4">
                 <Database className="w-6 h-6 mt-1 text-primary"/>
                 <div>
-                    <h3 className="font-semibold">1. Create a Firebase Project</h3>
-                    <p className="text-sm text-muted-foreground">If you don't have one already, go to the <Link href="https://console.firebase.google.com/" target="_blank" className="underline">Firebase Console</Link> and create a new project.</p>
+                    <h3 className="font-semibold">1. Go to your Firebase Project</h3>
+                    <p className="text-sm text-muted-foreground">Navigate to the <Link href="https://console.firebase.google.com/" target="_blank" className="underline">Firebase Console</Link> and select the project with the ID <code className='font-mono bg-muted p-1 rounded-md'>mstudent-9bs9s</code>.</p>
                 </div>
             </div>
             <div className="flex items-start gap-4">
@@ -68,7 +69,7 @@ GEMINI_API_KEY="your-gemini-api-key"
                 <div>
                     <h3 className="font-semibold">2. Generate a Service Account Key</h3>
                     <p className="text-sm text-muted-foreground">
-                        In the Firebase Console, go to <strong>Project Settings</strong> (click the gear icon) &gt; <strong>Service accounts</strong>.
+                        In the Firebase Console, go to <strong>Project Settings</strong> (click the gear icon next to "Project Overview") &gt; <strong>Service accounts</strong>.
                         Click on <strong>"Generate new private key"</strong>. A JSON file will be downloaded.
                     </p>
                 </div>
@@ -105,7 +106,7 @@ GEMINI_API_KEY="your-gemini-api-key"
                     <h3 className="font-semibold">1. Get API Key from Google AI Studio</h3>
                     <p className="text-sm text-muted-foreground">
                         Go to the <Link href="https://aistudio.google.com/app/apikey" target="_blank" className="underline">Google AI Studio</Link>.
-                        Click on <strong>"Create API key"</strong> to get your key.
+                        Click on <strong>"Create API key"</strong> to get your key. Make sure the API is enabled for your new Firebase project.
                     </p>
                 </div>
             </div>
@@ -114,7 +115,7 @@ GEMINI_API_KEY="your-gemini-api-key"
                 <div>
                     <h3 className="font-semibold">2. Update your <code>.env.local</code> file</h3>
                     <p className="text-sm text-muted-foreground">
-                        Copy the generated key and paste it as the value for <code>GEMINI_API_KEY</code> in your <code>.env.local</code> file.
+                        Copy the generated key and paste it as the value for <code>GEMINI_API_KEY</code> in your <code>.env.local</code> file. You will also need to generate a secure 32-character string for `SECRET_COOKIE_PASSWORD`.
                     </p>
                 </div>
             </div>
