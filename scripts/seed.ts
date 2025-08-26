@@ -1,7 +1,14 @@
 // @module:platform-core @layer:repo @owner:studio
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+// Explicitly load .env.local
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+
+// Log to confirm that the environment variable is loaded
+console.log(`Attempting to connect to Firebase project: ${process.env.FIREBASE_PROJECT_ID}`);
 
 // Ensure all environment variables are loaded
 const serviceAccount = {
