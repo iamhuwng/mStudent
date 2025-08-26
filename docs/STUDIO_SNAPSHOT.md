@@ -30,3 +30,5 @@ References:
 
 ### Commits since v0.4.1
 
+
+## 2025-08-26 — Materials: IELTS Reading editor (MVP) shipped
