@@ -175,3 +175,13 @@ This document provides a map of the generated code in the M'Student application,
 | `deadlines.api` | `GET`, `POST` | `api` | `src/app/api/notifications/[action]/route.ts` | `/api/notifications/*` |
 | `deadlines.compute.repo` | `computeDeadlines` | `repo` | `src/modules/deadlines-notifications/repo/deadlines.repo.ts` | - |
 | `deadlines.notify.repo` | `notifyUser` | `repo` | `src/modules/deadlines-notifications/repo/deadlines.repo.ts` | - |
+
+## editor-ielts-reading
+
+| Gen ID | Export | Layer | File | Routes |
+|---|---|---|---|---|
+| `editor.ielts.reading.save` | `saveIeltsContent` | `service` | `src/modules/editor-ielts-reading/service/ielts.service.ts` | `/api/materials/:id/editor/content` |
+| `editor.ielts.reading.addTask` | `addIeltsTask` | `service` | `src/modules/editor-ielts-reading/service/ielts.service.ts` | `/api/materials/:id/editor/tasks` |
+| `editor.ielts.reading.save` | `PUT` | `api` | `src/app/api/materials/[id]/editor/content/route.ts` | `/api/materials/:id/editor/content` |
+| `editor.ielts.reading.addTask` | `POST` | `api` | `src/app/api/materials/[id]/editor/tasks/route.ts` | `/api/materials/:id/editor/tasks` |
+| `editor.ielts.reading.save` | `saveIeltsTask` | `repo` | `src/modules/editor-ielts-reading/repo/ielts.repo.ts` | - |

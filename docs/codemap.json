@@ -909,5 +909,45 @@
     "module": "deadlines-notifications",
     "routes": [],
     "callers": ["src/app/api/notifications/[action]/route.ts"]
+  },
+  "editor.ielts.reading.save": {
+    "file": "src/modules/editor-ielts-reading/service/ielts.service.ts",
+    "export": "saveIeltsContent",
+    "layer": "service",
+    "module": "editor-ielts-reading",
+    "routes": ["/api/materials/:id/editor/content"],
+    "callers": []
+  },
+  "editor.ielts.reading.addTask": {
+    "file": "src/modules/editor-ielts-reading/service/ielts.service.ts",
+    "export": "addIeltsTask",
+    "layer": "service",
+    "module": "editor-ielts-reading",
+    "routes": ["/api/materials/:id/editor/tasks"],
+    "callers": []
+  },
+  "editor.ielts.reading.save.api": {
+    "file": "src/app/api/materials/[id]/editor/content/route.ts",
+    "export": "PUT",
+    "layer": "api",
+    "module": "editor-ielts-reading",
+    "routes": ["/api/materials/:id/editor/content"],
+    "callers": ["src/modules/editor-ielts-reading/service/ielts.service.ts"]
+  },
+  "editor.ielts.reading.addTask.api": {
+    "file": "src/app/api/materials/[id]/editor/tasks/route.ts",
+    "export": "POST",
+    "layer": "api",
+    "module": "editor-ielts-reading",
+    "routes": ["/api/materials/:id/editor/tasks"],
+    "callers": ["src/modules/editor-ielts-reading/service/ielts.service.ts"]
+  },
+  "editor.ielts.reading.save.repo": {
+    "file": "src/modules/editor-ielts-reading/repo/ielts.repo.ts",
+    "export": "saveIeltsTask",
+    "layer": "repo",
+    "module": "editor-ielts-reading",
+    "routes": [],
+    "callers": ["src/app/api/materials/[id]/editor/content/route.ts"]
   }
 }

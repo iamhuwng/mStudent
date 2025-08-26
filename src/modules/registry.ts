@@ -48,7 +48,7 @@ export const modules: Module[] = [
   {
     id: 'flashcards',
     title: 'Flashcards',
-    enabled: true,
+    enabled: false,
     path: '/flashcards',
     inNav: true,
   },
