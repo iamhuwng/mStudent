@@ -41,7 +41,7 @@ export async function getUngradedSubmissions(
     
     const snapshot = await query.limit(pagination.limit + 1).get();
     if (snapshot.empty) {
-        return { items: [], nextCursor: null, hasMore: false };
+        return { items: [], hasMore: false, nextCursor: null };
     }
 
     const items = snapshot.docs.map(doc => {
@@ -62,7 +62,7 @@ export async function getUngradedSubmissions(
         nextCursor = timestamp.toString();
     }
     
-    return { items, nextCursor, hasMore };
+    return { items, hasMore, nextCursor };
 }
 // <<< END gen:submissions.list.ungraded
 
@@ -98,3 +98,5 @@ export async function gradeSubmission(submissionId: string, gradeData: Omit<Grad
     } as Submission;
 }
 // <<< END gen:submissions.grade
+
+    
