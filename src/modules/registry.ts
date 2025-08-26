@@ -16,25 +16,11 @@ export const modules: Module[] = [
     path: '/users',
   },
   {
-    id: 'classes',
-    title: 'Classes',
-    enabled: true,
-    path: '/classes',
-  },
-  {
-    id: 'materials',
-    title: 'Materials',
-    enabled: true,
-    path: '/materials',
-  },
-  {
     id: 'auth-session',
     title: 'Login',
     enabled: true,
     path: '/login',
   },
-  // Add other modules here
-  // e.g. { id: 'courses', title: 'Courses', enabled: false, path: '/courses' },
 ];
 
 export function isModuleEnabled(id: string): boolean {

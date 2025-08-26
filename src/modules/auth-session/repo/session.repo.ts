@@ -2,7 +2,6 @@
 import 'server-only';
 import type { User } from '@/modules/users/service/users.types';
 import { IronSessionOptions } from 'iron-session';
-import { firestore } from '@/lib/firebase/firebase-admin';
 
 // >>> BEGIN gen:auth.claims.ensure (layer:repo)
 export interface SessionData {
@@ -21,33 +20,23 @@ export const sessionOptions: IronSessionOptions = {
 
 // >>> BEGIN gen:auth.login.repo (layer:repo)
 /**
- * Validates user credentials against Firestore.
+ * STUB: Validates user credentials.
  * @param username - The user's username.
  * @param password - The user's password.
  * @returns A promise that resolves with the user object or rejects with an error.
  */
 export async function login(username: string, password: string) {
-  console.log(`Repo: Attempting login for ${username}`);
+  console.log(`Repo: Stub login for ${username}`);
   
-  const usersCollection = firestore.collection('users');
-  const snapshot = await usersCollection.where('username', '==', username).limit(1).get();
-
-  if (snapshot.empty) {
-    throw new Error('Invalid username or password');
-  }
-
-  const userDoc = snapshot.docs[0];
-  const userData = userDoc.data();
-  
-  // This is a placeholder for password validation. 
-  // In a real application, you should use a library like bcrypt to compare hashed passwords.
-  if (userData.password && userData.password === password) {
+  // This is a placeholder for actual credential validation.
+  // In a real app, you would look up the user in a database.
+  if (username === 'admin' && password === 'datHung3384') {
     const user: Omit<User, 'enrolled'> = {
-        id: userDoc.id,
-        name: userData.name,
-        username: userData.username,
-        email: userData.email,
-        role: userData.role,
+        id: 'user-admin',
+        name: 'Admin User',
+        username: 'admin',
+        email: 'iamhuwng@gmail.com',
+        role: 'admin',
     };
     return { success: true, user };
   }

@@ -22,12 +22,6 @@ export default function Home() {
               <Button asChild>
                 <Link href="/login">Login</Link>
               </Button>
-              <Button variant="secondary" asChild>
-                <Link href="/getting-started">
-                  <Rocket className="mr-2"/>
-                  Get Started
-                </Link>
-              </Button>
             </div>
           </div>
         </div>

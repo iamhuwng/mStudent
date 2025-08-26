@@ -85,7 +85,7 @@ export function UserDetail({ id }: UserDetailProps) {
       <CardHeader>
         <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16">
-                <AvatarImage src={`https://picsum.photos/seed/${user.id}/128`} alt={user.name} data-ai-hint="profile picture" />
+                <AvatarImage src={`https://i.pravatar.cc/150?u=${user.id}`} alt={user.name} />
                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div>
