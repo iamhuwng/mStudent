@@ -52,7 +52,6 @@ export async function login(username: string, password: string) {
     return { success: true, user };
   }
 
-
   throw new Error('Invalid username or password');
 }
 // <<< END gen:auth.login.repo
