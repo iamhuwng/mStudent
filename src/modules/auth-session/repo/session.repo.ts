@@ -20,10 +20,11 @@ export interface SessionData {
  */
 export async function login(username: string, password: string): Promise<{ success: true, user: Omit<User, 'enrolled' | 'password'> }> {
   const usersRef = firestore.collection('users');
-  const snapshot = await usersRef.where('email', '==', `${username.toLowerCase()}@example.com`).limit(1).get();
+  const snapshot = await usersRef.where('username', '==', username.toLowerCase()).limit(1).get();
 
   if (snapshot.empty) {
-    // Fallback for admin user not in firestore
+    // This is a temporary fallback for the initial admin user.
+    // In a real application, all users should be in the database.
     if (username.toLowerCase() === 'admin' && password === 'datHung3384') {
         return {
             success: true,
