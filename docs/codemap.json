@@ -116,7 +116,7 @@
     "layer": "repo",
     "module": "auth-session",
     "routes": [],
-    "callers": []
+    "callers": ["src/middleware.ts"]
   },
   "users.list": {
     "file": "src/modules/users/ui/users-list.tsx",
