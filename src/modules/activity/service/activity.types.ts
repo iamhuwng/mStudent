@@ -1,11 +1,9 @@
 // @module:activity @layer:service @owner:studio
+import type { Page as CorePage } from '@/lib/types/pagination';
 
 // >>> BEGIN gen:core.types.pagination (layer:service)
-export type PaginatedResponse<T> = {
-    items: T[];
-    nextCursor: string | null;
-    hasMore: boolean;
-};
+/** @deprecated use Page from @/lib/types/pagination directly */
+export type PaginatedResponse<T> = CorePage<T>;
 // <<< END gen:core.types.pagination
 
 export type ActivityEvent = {

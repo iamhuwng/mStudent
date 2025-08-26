@@ -2,7 +2,8 @@
 import 'server-only';
 import { firestore } from '@/lib/firebase/firebase-admin';
 import { FieldValue, Timestamp } from 'firebase-admin/firestore';
-import type { Submission, Grade, PaginatedResponse } from '../service/submissions.types';
+import type { Submission, Grade } from '../service/submissions.types';
+import type { Page } from '@/lib/types/pagination';
 
 const submissionsCollection = firestore.collection('submissions');
 
@@ -27,7 +28,7 @@ export async function createSubmission(submissionData: Omit<Submission, 'id' | '
 export async function getUngradedSubmissions(
     filters: { classId?: string },
     pagination: { limit: number, cursor?: string }
-): Promise<PaginatedResponse<Submission>> {
+): Promise<Page<Submission>> {
     // This is a simplification. A real implementation would need to join across assignments to filter by class.
     // For now, we will fetch all ungraded submissions.
     let query = submissionsCollection.where('grade', '==', null).orderBy('submittedAt', 'desc');

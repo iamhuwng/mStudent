@@ -3,7 +3,8 @@
 
 import { http } from '@/lib/services/http';
 import { isModuleEnabled } from '@/modules/registry';
-import type { ActivityEvent, PaginatedResponse } from './activity.types';
+import type { ActivityEvent } from './activity.types';
+import type { Page } from '@/lib/types/pagination';
 
 const MODULE_ID = 'activity';
 
@@ -25,7 +26,7 @@ export async function logActivity(eventData: Omit<ActivityEvent, 'id' | 'timesta
 export async function getActivity(
     filters: { entityType?: string, entityId?: string },
     pagination: { limit?: number, cursor?: string }
-): Promise<PaginatedResponse<ActivityEvent>> {
+): Promise<Page<ActivityEvent>> {
   if (!isModuleEnabled(MODULE_ID)) {
     throw new Error('Activity module is disabled.');
   }
@@ -33,7 +34,7 @@ export async function getActivity(
       ...filters,
       ...pagination,
   } as Record<string, string>);
-  return http<PaginatedResponse<ActivityEvent>>(`/activity?${params.toString()}`);
+  return http<Page<ActivityEvent>>(`/activity?${params.toString()}`);
 }
 // <<< END gen:activity.list
 

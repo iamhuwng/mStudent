@@ -1,8 +1,9 @@
 // @module:submissions-grading @layer:service @owner:studio
-import type { PaginatedResponse as CorePaginatedResponse } from '@/modules/activity/service/activity.types';
+import type { Page as CorePage } from '@/lib/types/pagination';
 
 // >>> BEGIN gen:core.types.pagination (layer:service)
-export type PaginatedResponse<T> = CorePaginatedResponse<T>;
+/** @deprecated use Page from @/lib/types/pagination directly */
+export type PaginatedResponse<T> = CorePage<T>;
 // <<< END gen:core.types.pagination
 
 export type Grade = {

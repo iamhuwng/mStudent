@@ -2,8 +2,8 @@
 import 'server-only';
 import { firestore } from '@/lib/firebase/firebase-admin';
 import { FieldValue, Timestamp } from 'firebase-admin/firestore';
-import { isModuleEnabled } from '@/modules/registry';
-import type { ActivityEvent, PaginatedResponse } from '../service/activity.types';
+import type { ActivityEvent } from '../service/activity.types';
+import type { Page } from '@/lib/types/pagination';
 
 const activityCollection = firestore.collection('activity');
 
@@ -24,7 +24,7 @@ export async function logActivity(eventData: Omit<ActivityEvent, 'id' | 'timesta
 export async function getActivity(
     filters: { entityType?: string, entityId?: string },
     pagination: { limit: number, cursor?: string }
-): Promise<PaginatedResponse<ActivityEvent>> {
+): Promise<Page<ActivityEvent>> {
     let query: FirebaseFirestore.Query = activityCollection;
 
     if (filters.entityType) {

@@ -2,7 +2,8 @@
 import 'server-only';
 import { firestore } from '@/lib/firebase/firebase-admin';
 import { FieldValue, Timestamp } from 'firebase-admin/firestore';
-import type { Assignment, PaginatedResponse } from '../service/assignments.types';
+import type { Assignment } from '../service/assignments.types';
+import type { Page } from '@/lib/types/pagination';
 
 const assignmentsCollection = firestore.collection('assignments');
 const classMembersCollection = firestore.collection('classMembers');
@@ -27,7 +28,7 @@ export async function createAssignment(assignmentData: Omit<Assignment, 'id' | '
 export async function getAssignmentsForStudent(
     studentId: string,
     pagination: { limit: number, cursor?: string }
-): Promise<PaginatedResponse<Assignment>> {
+): Promise<Page<Assignment>> {
     // Get classes the student is in
     const memberSnapshot = await classMembersCollection.where('userId', '==', studentId).get();
     const classIds = memberSnapshot.docs.map(doc => doc.data().classId);
@@ -77,7 +78,7 @@ export async function getAssignmentsForStudent(
 export async function getAssignmentsForClass(
     classId: string,
     pagination: { limit: number, cursor?: string }
-): Promise<PaginatedResponse<Assignment>> {
+): Promise<Page<Assignment>> {
     let query = assignmentsCollection
         .where('assignedToId', '==', classId)
         .orderBy('createdAt', 'desc');

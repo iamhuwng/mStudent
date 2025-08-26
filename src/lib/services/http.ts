@@ -23,13 +23,20 @@ async function http<T>(path: string, options?: HttpOptions): Promise<T> {
   });
 
   if (!response.ok) {
-    // Attempt to parse error response
+    const contentType = response.headers.get('content-type');
     let errorData;
-    try {
-      errorData = await response.json();
-    } catch (e) {
-      errorData = { message: `Request failed with status ${response.status}: ${response.statusText}` };
+
+    if (contentType && contentType.includes('application/json')) {
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = { message: `Request failed with status ${response.status} but failed to parse JSON error response.` };
+      }
+    } else {
+       const text = await response.text();
+       errorData = { message: `Request failed with status ${response.status}. Server returned non-JSON response: ${text.substring(0, 400)}` };
     }
+
     // Include reqId in the error message if available
     const message = errorData.message || 'An unknown error occurred';
     const reqId = errorData.reqId ? ` (Request ID: ${errorData.reqId})` : '';

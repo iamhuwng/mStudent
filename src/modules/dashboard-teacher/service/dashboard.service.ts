@@ -35,7 +35,7 @@ export async function getTeacherDashboardData(): Promise<TeacherDashboardData> {
         data.submissions = submissionsResponse.items;
     }
     if (isModuleEnabled('materials')) {
-        const materialsResponse = await getMaterials(pagination);
+        const materialsResponse = await getMaterials({page: 1, limit: 5});
         data.materials = materialsResponse.data;
     }
     if (isModuleEnabled('activity')) {
