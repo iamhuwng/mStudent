@@ -7,21 +7,12 @@ import type { User } from './users.types';
 
 const MODULE_ID = 'users';
 
-export type GetUsersResponse = {
-    users: User[];
-    hasNextPage: boolean;
-}
-
 // >>> BEGIN gen:users.list.service (layer:service)
-export async function getUsers(limit: number = 10, startAfter?: string): Promise<GetUsersResponse> {
+export async function getUsers(): Promise<User[]> {
   if (!isModuleEnabled(MODULE_ID)) {
     throw new Error('Users module is disabled.');
   }
-  const params = new URLSearchParams({ limit: String(limit) });
-  if (startAfter) {
-    params.append('startAfter', startAfter);
-  }
-  return http<GetUsersResponse>(`/users?${params.toString()}`);
+  return http<User[]>('/users');
 }
 // <<< END gen:users.list.service
 

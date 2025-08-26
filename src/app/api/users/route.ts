@@ -1,26 +1,20 @@
 // @module:users @layer:api @owner:studio
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { 
     getUsers as repoGetUsers,
     createUser as repoCreateUser
 } from '@/modules/users/repo/users.repo';
 import { isModuleEnabled } from '@/modules/registry';
-import { userCreateSchema } from '@/modules/users/service/users.types';
 
 // >>> BEGIN gen:users.api.list (layer:api)
-export async function GET(request: NextRequest) {
+export async function GET() {
   if (!isModuleEnabled('users')) {
     return NextResponse.json({ message: 'Users module is disabled' }, { status: 403 });
   }
 
   try {
-    const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit') || '10', 10);
-    const startAfterDocId = searchParams.get('startAfter') || undefined;
-
-    const { users, hasNextPage } = await repoGetUsers(limit, startAfterDocId);
-    
-    return NextResponse.json({ users, hasNextPage });
+    const users = await repoGetUsers();
+    return NextResponse.json(users);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json({ message }, { status: 500 });
@@ -36,8 +30,7 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json();
-        const validatedData = userCreateSchema.parse(body);
-        const newUser = await repoCreateUser(validatedData);
+        const newUser = await repoCreateUser(body);
         return NextResponse.json(newUser, { status: 201 });
     } catch (error) {
         const message = error instanceof Error ? error.message : 'An unknown error occurred';

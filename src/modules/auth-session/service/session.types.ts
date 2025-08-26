@@ -15,6 +15,6 @@ export type LoginResponse = {
   user: {
     username: string;
     name: string;
-    roles: string[];
+    role: 'admin' | 'teacher' | 'student';
   };
 };

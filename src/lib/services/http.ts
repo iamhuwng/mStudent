@@ -17,7 +17,7 @@ async function http<T>(path: string, options?: HttpOptions): Promise<T> {
     },
     // Example of adding revalidation for Next.js caching
     next: {
-        revalidate: 60, // Revalidate GET requests every 60 seconds
+        revalidate: 0, // Don't cache by default
         ...options?.next,
     }
   });
@@ -28,7 +28,7 @@ async function http<T>(path: string, options?: HttpOptions): Promise<T> {
     try {
       errorData = await response.json();
     } catch (e) {
-      errorData = { message: `Request failed with status ${response.status}` };
+      errorData = { message: `Request failed with status ${response.status}: ${response.statusText}` };
     }
     throw new Error(errorData.message || 'An unknown error occurred');
   }
@@ -38,7 +38,12 @@ async function http<T>(path: string, options?: HttpOptions): Promise<T> {
     return null as T;
   }
   
-  return response.json();
+  try {
+    return response.json();
+  } catch (error) {
+    // Handle cases where response is OK but body is not valid JSON
+    throw new Error('Failed to parse JSON response');
+  }
 }
 // <<< END gen:core.http.fetch
 

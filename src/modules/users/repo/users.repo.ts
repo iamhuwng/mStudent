@@ -1,99 +1,62 @@
 // @module:users @layer:repo @owner:studio
 import 'server-only';
-import { firestore } from '@/lib/firebase/firebase-admin';
 import type { User } from '../service/users.types';
-import { FieldValue } from 'firebase-admin/firestore';
 
-const usersCollection = firestore.collection('users');
+const MOCK_USERS: User[] = [
+  { id: 'user-admin', username: 'admin', email: 'iamhuwng@gmail.com', name: 'Admin User', role: 'admin', enrolled: new Date() },
+  { id: 'user-teacher-1', username: 'teacher', email: 'teacher@example.com', name: 'Jane Teacher', role: 'teacher', enrolled: new Date() },
+  { id: 'user-student-1', username: 'student', email: 'student@example.com', name: 'John Student', role: 'student', enrolled: new Date() },
+];
 
 // >>> BEGIN gen:users.list.repo (layer:repo)
-export async function getUsers(limit: number = 10, startAfterDocId?: string): Promise<{users: User[], hasNextPage: boolean}> {
-  console.log('Repo: Fetching users from Firestore with pagination');
-  let query = usersCollection.orderBy('name').limit(limit + 1);
-
-  if (startAfterDocId) {
-    const startAfterDoc = await usersCollection.doc(startAfterDocId).get();
-    if (startAfterDoc.exists) {
-        query = query.startAfter(startAfterDoc);
-    }
-  }
-
-  const snapshot = await query.get();
-  if (snapshot.empty) {
-    return { users: [], hasNextPage: false };
-  }
-
-  const users = snapshot.docs.map(doc => {
-    const { password, ...user } = doc.data();
-    return {
-        id: doc.id,
-        ...user,
-        enrolled: user.enrolled?.toDate(),
-    } as User
-  });
-
-  const hasNextPage = users.length > limit;
-  if (hasNextPage) {
-    users.pop(); // Remove the extra document used to check for the next page
-  }
-
-  return { users, hasNextPage };
+export async function getUsers(): Promise<User[]> {
+  console.log('Repo: Stub returning mock users');
+  return Promise.resolve(MOCK_USERS);
 }
 // <<< END gen:users.list.repo
 
 // >>> BEGIN gen:users.detail.repo (layer:repo)
 export async function getUserById(id: string): Promise<User | null> {
-  console.log(`Repo: Fetching user with id ${id} from Firestore`);
-  const doc = await usersCollection.doc(id).get();
-  if (!doc.exists) {
-    return null;
-  }
-  const data = doc.data();
-  // Exclude password from the returned data
-  const { password, ...user } = data!;
-  return {
-    id: doc.id,
-    ...user,
-    enrolled: user.enrolled?.toDate(),
-  } as User;
+  console.log(`Repo: Stub finding user with id ${id}`);
+  const user = MOCK_USERS.find((u) => u.id === id) || null;
+  return Promise.resolve(user);
 }
 // <<< END gen:users.detail.repo
 
 // >>> BEGIN gen:users.create.repo (layer:repo)
 export async function createUser(userData: Omit<User, 'id'>): Promise<User> {
-    console.log('Repo: Creating new user in Firestore');
-    const newUserPayload = {
-      ...userData,
-      enrolled: FieldValue.serverTimestamp(),
+    console.log('Repo: Stub creating new user');
+    const newUser: User = {
+        id: `user-new-${Math.random()}`,
+        ...userData,
+        enrolled: new Date(),
     };
-    const newUserRef = await usersCollection.add(newUserPayload);
-    const newUser = await getUserById(newUserRef.id);
-    return newUser!;
+    MOCK_USERS.push(newUser);
+    return Promise.resolve(newUser);
 }
 // <<< END gen:users.create.repo
 
 // >>> BEGIN gen:users.update.repo (layer:repo)
 export async function updateUser(id: string, userData: Partial<Omit<User, 'id'>>): Promise<User> {
-    console.log(`Repo: Updating user with id ${id} in Firestore`);
-    const userRef = usersCollection.doc(id);
-    const doc = await userRef.get();
-    if (!doc.exists) {
+    console.log(`Repo: Stub updating user with id ${id}`);
+    const userIndex = MOCK_USERS.findIndex(u => u.id === id);
+    if (userIndex === -1) {
         throw new Error('User not found');
     }
-    await userRef.update(userData);
-    const updatedUser = await getUserById(id);
-    return updatedUser!;
+    const updatedUser = { ...MOCK_USERS[userIndex], ...userData };
+    MOCK_USERS[userIndex] = updatedUser;
+    return Promise.resolve(updatedUser);
 }
 // <<< END gen:users.update.repo
 
 // >>> BEGIN gen:users.delete.repo (layer:repo)
 export async function deleteUser(id: string): Promise<void> {
-    console.log(`Repo: Deleting user with id ${id} from Firestore`);
-    const userRef = usersCollection.doc(id);
-    const doc = await userRef.get();
-    if (!doc.exists) {
+    console.log(`Repo: Stub deleting user with id ${id}`);
+    const userIndex = MOCK_USERS.findIndex(u => u.id === id);
+    if (userIndex === -1) {
         throw new Error('User not found');
     }
-    await userRef.delete();
+    MOCK_USERS.splice(userIndex, 1);
+    return Promise.resolve();
 }
 // <<< END gen:users.delete.repo

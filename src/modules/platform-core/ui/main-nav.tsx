@@ -14,21 +14,17 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { GraduationCap, Users, BookOpen, FileText, ClipboardCheck, History } from 'lucide-react';
+import { GraduationCap, Users } from 'lucide-react';
 import React from 'react';
 
 const moduleIcons: { [key: string]: React.ReactElement } = {
   users: <Users />,
-  classes: <BookOpen />,
-  materials: <FileText />,
-  assignments: <ClipboardCheck />,
-  activity: <History />,
 };
 
 // >>> BEGIN gen:core.nav (layer:ui)
 function DesktopNav() {
     const pathname = usePathname();
-    const enabledModules = modules.filter((m) => m.enabled && m.id !== 'auth-session' && !m.path.includes('dashboard'));
+    const enabledModules = modules.filter((m) => m.enabled && m.id !== 'auth-session');
 
     return (
         <>
