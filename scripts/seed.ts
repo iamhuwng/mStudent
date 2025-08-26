@@ -25,17 +25,14 @@ async function seedDatabase() {
   console.log('Starting to seed database...');
 
   // Clear existing data
-  console.log('Deleting existing data...');
-  const collections = ['users', 'classes', 'materials', 'classMembers'];
-  for (const col of collections) {
-      const snapshot = await db.collection(col).get();
-      const deletePromises: Promise<any>[] = [];
-      snapshot.forEach((doc) => {
-        deletePromises.push(doc.ref.delete());
-      });
-      await Promise.all(deletePromises);
-      console.log(`- Existing ${col} deleted.`);
-  }
+  console.log('Deleting existing users...');
+  const usersSnapshot = await db.collection('users').get();
+  const deletePromises: Promise<any>[] = [];
+  usersSnapshot.forEach((doc) => {
+    deletePromises.push(doc.ref.delete());
+  });
+  await Promise.all(deletePromises);
+  console.log('- Existing users deleted.');
 
   // --- Seed Users ---
   console.log('Adding new users...');
@@ -50,47 +47,6 @@ async function seedDatabase() {
       return db.collection('users').doc(user.id).set(user);
   });
   await Promise.all(userPromises);
-
-  // --- Seed Classes ---
-  console.log('Adding new classes...');
-  const classes = [
-      { id: 'class-algebra', name: 'Algebra 101', description: 'An introductory course on modern algebra.'},
-      { id: 'class-history', name: 'World History', description: 'A survey of world history from 1500 to the present.'},
-  ];
-  const classPromises = classes.map(cls => {
-      console.log(`- Adding class: ${cls.name}`);
-      return db.collection('classes').doc(cls.id).set(cls);
-  });
-  await Promise.all(classPromises);
-
-  // --- Seed Materials ---
-  console.log('Adding new materials...');
-  const materials = [
-      { id: 'mat-alg-quiz', name: 'Algebra Basics Quiz', format: 'quiz', tags: ['algebra', 'quiz'], timeLimit: 30, content: 'This quiz covers basic algebraic concepts including variables, equations, and functions.' },
-      { id: 'mat-hist-video', name: 'The Renaissance', format: 'video', tags: ['history', 'renaissance', 'video'], content: 'A documentary exploring the cultural rebirth of Europe.' },
-      { id: 'mat-alg-doc', name: 'Polynomials Explained', format: 'document', tags: ['algebra', 'polynomials'], content: 'A comprehensive document detailing the properties and operations of polynomials.' },
-  ];
-  const materialPromises = materials.map(mat => {
-      console.log(`- Adding material: ${mat.name}`);
-      return db.collection('materials').doc(mat.id).set(mat);
-  });
-  await Promise.all(materialPromises);
-
-  // --- Seed Class Members ---
-  console.log('Assigning members to classes...');
-  const assignments = [
-      { classId: 'class-algebra', userId: 'user-teacher-1', role: 'teacher' },
-      { classId: 'class-algebra', userId: 'user-student-1', role: 'student' },
-      { classId: 'class-history', userId: 'user-teacher-1', role: 'teacher' },
-      { classId: 'class-history', userId: 'user-student-1', role: 'student' },
-      { classId: 'class-history', userId: 'user-student-2', role: 'student' },
-  ];
-  const assignmentPromises = assignments.map(a => {
-      console.log(`- Assigning ${a.userId} to ${a.classId}`);
-      return db.collection('classMembers').add(a);
-  });
-  await Promise.all(assignmentPromises);
-
 
   console.log('Database seeding completed successfully!');
 }

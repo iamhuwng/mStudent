@@ -2,11 +2,12 @@
 import 'server-only';
 import type { User } from '@/modules/users/service/users.types';
 import { IronSessionOptions } from 'iron-session';
+import { firestore } from '@/lib/firebase/firebase-admin';
 
 // >>> BEGIN gen:auth.claims.ensure (layer:repo)
 export interface SessionData {
   isLoggedIn: boolean;
-  user: Omit<User, 'enrolled'>;
+  user: Omit<User, 'enrolled' | 'password'>;
 }
 
 export const sessionOptions: IronSessionOptions = {
@@ -20,27 +21,33 @@ export const sessionOptions: IronSessionOptions = {
 
 // >>> BEGIN gen:auth.login.repo (layer:repo)
 /**
- * STUB: Validates user credentials.
+ * Validates user credentials against the Firestore database.
  * @param username - The user's username.
  * @param password - The user's password.
  * @returns A promise that resolves with the user object or rejects with an error.
  */
-export async function login(username: string, password: string) {
-  console.log(`Repo: Stub login for ${username}`);
+export async function login(username: string, password: string): Promise<{ success: true, user: Omit<User, 'enrolled' | 'password'> }> {
+  console.log(`Repo: Attempting login for ${username}`);
   
-  // This is a placeholder for actual credential validation.
-  // In a real app, you would look up the user in a database.
-  if (username === 'admin' && password === 'datHung3384') {
-    const user: Omit<User, 'enrolled'> = {
-        id: 'user-admin',
-        name: 'Admin User',
-        username: 'admin',
-        email: 'iamhuwng@gmail.com',
-        role: 'admin',
-    };
-    return { success: true, user };
+  const usersRef = firestore.collection('users');
+  const snapshot = await usersRef.where('username', '==', username).limit(1).get();
+
+  if (snapshot.empty) {
+    console.log(`Repo: User not found: ${username}`);
+    throw new Error('Invalid username or password');
   }
 
-  throw new Error('Invalid username or password');
+  const userDoc = snapshot.docs[0];
+  const userData = userDoc.data();
+
+  if (userData.password !== password) {
+    console.log(`Repo: Invalid password for user: ${username}`);
+    throw new Error('Invalid username or password');
+  }
+
+  const { password: _, enrolled: __, ...user } = userData;
+  
+  console.log(`Repo: Login successful for ${username}`);
+  return { success: true, user: user as Omit<User, 'enrolled' | 'password'> };
 }
 // <<< END gen:auth.login.repo
