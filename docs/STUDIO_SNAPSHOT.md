@@ -16,3 +16,7 @@ How to run the seed:
 References:
 - CODEMAP: docs/CODEMAP.md and docs/codemap.json
 - Registry: src/modules/registry.ts
+
+## Update (2025-08-26)
+- Shipped: <task short name>
+- Notes: <1–2 bullets>
