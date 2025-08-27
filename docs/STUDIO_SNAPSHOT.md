@@ -36,3 +36,5 @@ References:
 ## 2025-08-26 — Assignment UX 1.0 shipped
 
 ## 2025-08-26 — Grading 1.0 shipped
+
+## 2025-08-27 — E2E smoke test green on CI
