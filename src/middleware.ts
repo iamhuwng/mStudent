@@ -1,39 +1,45 @@
 // @module:platform-core @layer:api @owner:studio
-import { type NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
+import { getIronSession } from 'iron-session'
+import type { SessionData } from '@/modules/auth-session/session'
+import { sessionOptions } from '@/modules/auth-session/session'
 
-// Simple path → roles map (UI & APIs will still enforce real auth/roles)
-const protectedRoutes: Record<string, string[]> = {
-  '/dashboard/teacher': ['admin', 'teacher'],
-  '/dashboard/student': ['admin', 'student'],
-  '/users': ['admin', 'teacher'],
-  '/classes': ['admin', 'teacher'],
-  '/materials': ['admin', 'teacher'],
-};
+// Public routes (no auth)
+const PUBLIC_PREFIXES = [
+  '/login',
+  '/api/session/login',
+  '/api/session/logout',
+  '/favicon.ico',
+  '/_next', // static & images below are excluded via matcher anyway
+]
 
 // >>> BEGIN gen:core.middleware.guard (layer:api)
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  // IMPORTANT: in middleware use iron-session/edge with Request/Response
+  const res = NextResponse.next()
+  const session = await getIronSession<SessionData>(request, res, sessionOptions)
+  const { isLoggedIn } = session
+  const { pathname } = request.nextUrl
 
-  const needsAuth = Object.keys(protectedRoutes).some((prefix) =>
-    pathname.startsWith(prefix)
-  );
-  if (!needsAuth) return NextResponse.next();
-
-  // In middleware, use request.cookies – NOT next/headers cookies()
-  const session = request.cookies.get('mstudent-session')?.value;
-
-  if (!session) {
-    const url = new URL('/login', request.url);
-    url.searchParams.set('next', pathname);
-    return NextResponse.redirect(url);
+  // Allow public paths through
+  if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) {
+    return res
   }
 
-  // (Optional) We could decode role from a compact cookie here,
-  // but keep it simple and let server routes/pages enforce roles.
-  return NextResponse.next();
+  // Block everything else if not logged in
+  if (!isLoggedIn) {
+    const url = new URL('/login', request.url)
+    url.searchParams.set('next', pathname)
+    return NextResponse.redirect(url)
+  }
+
+  // Allow request; iron-session headers/cookies are on `res`
+  return res
 }
 // <<< END gen:core.middleware.guard
 
+// Keep your matcher minimal (no /api, no static buckets)
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
-};
+}

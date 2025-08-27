@@ -1,23 +1,15 @@
 // next.config.ts
-import type { NextConfig } from 'next';
-import 'dotenv/config';
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  typescript: { ignoreBuildErrors: false },
+  // Moved from experimental.serverComponentsExternalPackages
+  serverExternalPackages: ['firebase-admin'],
 
-  // Next 15+ expects an object, not boolean.
-  experimental: {
-    serverActions: {},
-  },
+  // Remove deprecated/invalid experimental flags.
+  // If you don’t actually use Server Actions, omit this entirely.
+  // experimental: {
+  //   serverActions: {}, // only add if you REALLY need it as an object
+  // },
+}
 
-  // moved from experimental.serverComponentsExternalPackages
-  serverExternalPackages: ['@node-rs/argon2'],
-
-  images: {
-    domains: ['firebasestorage.googleapis.com', 'lh3.googleusercontent.com'],
-  },
-
-  eslint: { ignoreDuringBuilds: false },
-};
-
-export default nextConfig;
+export default nextConfig

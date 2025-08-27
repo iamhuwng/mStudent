@@ -5,8 +5,20 @@ import admin from 'firebase-admin';
 function initAdminApp(): admin.app.App {
   if (admin.apps.length) return admin.app();
 
+  // Explicit emulator detection: only switch when emulator envs are present.
+  const usingEmulator =
+    !!process.env.FIREBASE_AUTH_EMULATOR_HOST ||
+    !!process.env.FIRESTORE_EMULATOR_HOST;
+
   try {
-    // Prefer a full service account JSON if provided (as JSON string).
+    // 1) Emulator: no credentials needed, just projectId.
+    if (usingEmulator) {
+      const projectId = process.env.FIREBASE_PROJECT_ID?.trim() || 'demo-project';
+      admin.initializeApp({ projectId });
+      return admin.app();
+    }
+
+    // 2) Full service account JSON (preferred in prod/CI)
     const saJson = process.env.FIREBASE_SERVICE_ACCOUNT?.trim();
     if (saJson) {
       const parsed = JSON.parse(saJson) as {
@@ -14,42 +26,39 @@ function initAdminApp(): admin.app.App {
         client_email: string;
         private_key: string;
       };
-      parsed.private_key = parsed.private_key.replace(/\\n/g, '\n');
+      const privateKey = parsed.private_key.replace(/\\n/g, '\n');
       admin.initializeApp({
         credential: admin.credential.cert({
           projectId: parsed.project_id,
           clientEmail: parsed.client_email,
-          privateKey: parsed.private_key,
+          privateKey,
         }),
       });
       return admin.app();
     }
 
-    // Fallback to individual envs (ensure \n are unescaped).
+    // 3) Individual env vars (fallback)
     const projectId = process.env.FIREBASE_PROJECT_ID?.trim();
     const clientEmail = process.env.FIREBASE_CLIENT_EMAIL?.trim();
-    const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+    const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY || '';
+    const privateKey = privateKeyRaw.replace(/\\n/g, '\n');
 
     if (!projectId || !clientEmail || !privateKey) {
-      throw new Error('Missing FIREBASE_* envs. Provide FIREBASE_SERVICE_ACCOUNT or all of PROJECT_ID, CLIENT_EMAIL, PRIVATE_KEY.');
+      throw new Error(
+        'Firebase Admin init failed: provide FIREBASE_SERVICE_ACCOUNT (JSON) OR all of FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY. If running emulators, set FIREBASE_AUTH_EMULATOR_HOST / FIRESTORE_EMULATOR_HOST.'
+      );
     }
 
     admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId,
-        clientEmail,
-        privateKey,
-      }),
+      credential: admin.credential.cert({ projectId, clientEmail, privateKey }),
     });
-
     return admin.app();
   } catch (err) {
     console.error('Firebase Admin init failed:', err);
-    // Fail fast so downstream calls don’t throw confusing errors.
-    throw err;
+    throw err; // fail fast so downstream errors aren’t confusing
   }
 }
 
-// Export a ready Firestore instance (or throw immediately if init fails)
 const app = initAdminApp();
 export const firestore = app.firestore();
+export const auth = app.auth();
