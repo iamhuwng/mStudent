@@ -1,34 +1,23 @@
-import type {NextConfig} from 'next';
-import 'dotenv/config'
+// next.config.ts
+import type { NextConfig } from 'next';
+import 'dotenv/config';
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-    ],
-  },
+  typescript: { ignoreBuildErrors: false },
+
+  // Next 15+ expects an object, not boolean.
   experimental: {
-    serverActions: true,
-    serverComponentsExternalPackages: ['firebase-admin'],
+    serverActions: {},
   },
+
+  // moved from experimental.serverComponentsExternalPackages
+  serverExternalPackages: ['@node-rs/argon2'],
+
+  images: {
+    domains: ['firebasestorage.googleapis.com', 'lh3.googleusercontent.com'],
+  },
+
+  eslint: { ignoreDuringBuilds: false },
 };
 
 export default nextConfig;
